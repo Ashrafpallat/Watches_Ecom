@@ -1,0 +1,91 @@
+<%-include('./includes/header.ejs') %>
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <%-include('./includes/headerNav.ejs') %>
+
+
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+
+          <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">coupon Management</h4>
+
+                <form action="/admin/addcoupon" class="forms-sample" method="post">
+                  <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="couponName" class="form-control" pattern="^\S.*\S$" title="Leading and trailing spaces are not allowed" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Coupon code:</label>
+                    <input type="text" id="name" name="couponCode" class="form-control" pattern="^[a-zA-Z0-9]+$" title="Only numbers and characters are allowed" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="couponDescription" class="form-control"  required></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Expiry date:</label>
+                    <input type="date" id="name" name="expiryDate" class="form-control" style="width: auto;" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Discount amount</label>
+                    <input type="number" id="name" name="discountAmount" class="form-control" min="0" required>
+                  </div>
+                  <!-- <div class="form-group">
+                    <label for="name">Min amount</label>
+                    <input type="number" id="name" name="minAmount" class="form-control" min="0" required>
+                  </div> -->
+
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add coupon</button>
+                  </div>
+              </div>
+
+
+              </form>
+
+
+              <!-- content-wrapper ends -->
+              <!-- partial:../../partials/_footer.html -->
+              <!-- <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Premium <a
+                  href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from
+                BootstrapDash.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All
+                rights reserved.</span>
+            </div>
+          </footer> -->
+              <%-include('./includes/footerNav.ejs')  %>
+        <!-- container-scroller -->
+        <!-- plugins:js -->
+        <script src="../../vendors/js/vendor.bundle.base.js"></script>
+        <!-- endinject -->
+        <!-- Plugin js for this page -->
+        <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+        <script src="../../vendors/select2/select2.min.js"></script>
+        <script src="../../vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+        <!-- End plugin js for this page -->
+        <!-- inject:js -->
+        <script src="../../js/off-canvas.js"></script>
+        <script src="../../js/hoverable-collapse.js"></script>
+        <script src="../../js/template.js"></script>
+        <script src="../../js/settings.js"></script>
+        <script src="../../js/todolist.js"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script src="../../js/file-upload.js"></script>
+        <script src="../../js/typeahead.js"></script>
+        <script src="../../js/select2.js"></script>
+        <!-- End custom js for this page-->
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<%-include('./includes/header.ejs')  %>
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <%-include('./includes/headerNav.ejs')  %>
+
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">All Orders</h4>
+                <p class="card-description">
+                  <!-- Add class <code>.table-striped</code> -->
+                </p>
+                <!-- <a href="/admin/addcoupon"><button type="button" class="btn btn-primary">Add Coupons</button></a> -->
+                <div class="table-responsive">
+                  <table class="table table-striped" id="myTable">
+                    <thead>
+                      <tr>
+                        <th>
+                          Sl No
+                        </th>
+                        <th>
+                          Id
+                        </th>
+                        <th>
+                          User Name
+                        </th>
+                        <th>
+                          Payment method
+                        </th>
+                        <th>
+                          Total
+                        </th>
+                        <th>
+                          Orders
+                        </th>
+                        <th>
+                          Date
+                        </th>
+                        <th>
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach(order => { %>
+                         
+                      <tr>
+                        <td>
+                            <%= order._id %>
+                        </td>
+                        <td>
+                            <%= order.user.fname %>
+                        </td>
+                        <td>
+                            <%= order.paymentMethod %>
+                        </td>
+                        <td>
+                          ₹ <%= order.totalAmount %>
+                        </td>
+                        <td>
+                            <a href="/admin/ordered-items/<%= order._id %>">Items</a>
+                        </td>
+                        <td>
+                            <%= order.createdAt.toLocaleDateString() %>
+                        </td>
+                        <td>
+                            <%= order.status %>
+                        </td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <!-- <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Premium <a
+                    href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from
+                  BootstrapDash.</span>
+                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights
+                  reserved.</span> -->
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="../../vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../js/off-canvas.js"></script>
+    <script src="../../js/hoverable-collapse.js"></script>
+    <script src="../../js/template.js"></script>
+    <script src="../../js/settings.js"></script>
+    <script src="../../js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
+    <script>
+      function addSerialNumbersToTable(tableId) {
+        var table = document.getElementById(tableId);
+        var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        // Iterate over the rows and add serial numbers
+        for (var i = 0; i < rows.length; i++) {
+          // Create a new cell for the serial number
+          var cell = rows[i].insertCell(0);
+          // Add the serial number to the cell (starting from 1)
+          cell.textContent = i + 1;
+        }
+      }
+
+      // Call the function to add serial numbers to the table with ID 'myTable'
+      addSerialNumbersToTable('myTable');
+    </script>
+
+</body>
+
+</html>

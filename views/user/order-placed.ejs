@@ -1,0 +1,65 @@
+<%- include('./includes/header.ejs') %>
+
+<div class="men_banner">
+  <%- include('./includes/headerNav.ejs', { cartItemsLength: cart && cart.items ? cart.items.length : 0 }) %>
+
+  <section class="bg-light py-5">
+    <div class="container text-center">
+      <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-8 mb-4">
+          <!-- Checkout -->
+          <div class="card shadow-0 border">
+            <div class="p-4">
+              <!-- Thanks Message -->
+              <h1 class="mb-3 text-success">Thank You!</h1>
+              <p>Your order has been placed successfully.</p>
+
+              <!-- Order Summary Table -->
+              <h5 class="card-title mb-3">Order Summary</h5>
+              <table class="table table-bordered table-ligh">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% order.items.forEach(item => { %>
+                    <tr>
+                      <td><%= item.product.title %></td>
+                      <td><%= item.quantity %></td>
+                      <td><%= item.price %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+
+              <!-- Additional order details -->
+              <h5 class="card-title mb-3">Additional Details</h5>
+              <p><strong>Order ID:</strong> <%= order._id %></p>
+              <p><strong>Total Amount:</strong> <%= order.totalAmount %></p>
+              <p><strong>Delivery Address:</strong> <%= order.selectedAddress %></p>
+              <!-- Add more details as needed -->
+
+              <!-- Show Orders Button -->
+              <a href="/my-orders" class="btn btn-success mt-3">Show Orders</a>
+              
+              <!-- ... (existing content remains unchanged) ... -->
+            </div>
+          </div>
+          <!-- Checkout -->
+        </div>
+
+        <!-- ... (other content remains unchanged) ... -->
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<%- include('./includes/footerNav.ejs') %>
+
+<!-- ... (existing content remains unchanged) ... -->
+
+<%- include('./includes/footer.ejs') %>

@@ -1,0 +1,123 @@
+<%-include('./includes/header.ejs')  %>
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <%-include('./includes/headerNav.ejs')  %>
+
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+
+              <!-- Order Information and Delivery Address Side by Side -->
+              <div class="row">
+                <!-- Order Information -->
+                <div class="col-md-6">
+                  <section>
+                    <h2>Order Information</h2>
+                    <!-- Display order details here -->
+                    <p>Order ID: <%= order._id %></p>
+                    <p>Order Date: <%= order.createdAt.toLocaleDateString() %></p>
+                    <p>Total Amount: <%= order.totalAmount %></p>
+                    <p>Payment Method: <%= order.paymentMethod %></p>
+                    <form action="/admin/change-order-status" method="post">
+                    <section>
+                    <input type="hidden" name="orderId" value="<%= order._id %>" id="">
+                      <!-- Dropdown for changing order status -->
+                      <label for="orderStatus">Order Status:</label>
+                      <select id="orderStatus" name="orderStatus">
+                        <!-- <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option> -->
+                        <option value="confirmed" <%= order.status === 'order placed' ? 'selected' : '' %>>Order placed</option>
+                        <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                        <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                      </select>
+                    </section>
+                    
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="col-md-6">
+                  <section>
+                    <h2>Delivery Address</h2>
+                    <%= order.selectedAddress %>
+                    <p>Name: <%= order.user.fname %></p>
+                    <p>Contact Number: <%= order.user.phone %></p>
+                  </section>
+                </div>
+              </div>
+
+              <!-- Items Information -->
+              <section>
+                <h2>Items</h2>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% order.items.forEach(item => { %>
+                      <tr>
+                        <td>
+                          <img src="/<%= item.product.imageURLs[3] %>" style="width: 60px; height: auto; border-radius: 0%;" alt="Product Image" class="img-fluid">
+                        </td>
+                        <td><%= item.product.title %></td>
+                        <td>₹ <%= item.price %></td>
+                        <td><%= item.quantity %></td>
+                      </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <!-- Action Buttons -->
+              <section>
+                <h2>Actions</h2>
+                <!-- Add your action buttons (e.g., cancel order, track order) here -->
+                <% if (order.status==='Pending') { %>
+                <!-- <button class="btn btn-danger">Accept Return</button> -->
+                <a href="/admin/accept-return/<%= order._id %>" class="btn btn-danger">Accept Return</a>
+                <% } %>
+                <button type="submit" class="btn btn-primary">Change status</button>
+              </form>
+              </section>
+              </main>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%-include('./includes/footerNav.ejs')  %>
+
+    <!-- plugins:js -->
+    <script src="/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="/vendors/chart.js/Chart.min.js"></script>
+    <script src="/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+  
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/js/off-canvas.js"></script>
+    <script src="/js/hoverable-collapse.js"></script>
+    <script src="/js/template.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/Chart.roundedBarCharts.js"></script>
+
+</body>
+
+</html>

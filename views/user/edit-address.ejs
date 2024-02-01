@@ -1,0 +1,139 @@
+<%-include('./includes/header.ejs')  %>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" crossorigin="anonymous">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+
+<!-- Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+
+
+<div class="men_banner">
+  <%- include('./includes/headerNav.ejs', { cartItemsLength: cart && cart.items ? cart.items.length : 0 }) %>
+  <div class="container">
+    <div class="row gutters">
+      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+        <div class="card h-100">
+          <div class="account-settings">
+            <div class="user-profile">
+              <div class="user-avatar">
+                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">
+              </div>
+              <h5 class="user-name"> <%= user.fname %>
+              </h5>
+              <h6 class="user-email"><%= user.email %></h6>
+            </div>
+
+            <!-- Buttons for Edit Profile, Orders, Manage Address, and Wallet -->
+            <a href="/edit-profile" class="btn btn-light btn-block mb-2">Edit Profile</a>
+            <a href="/orders" class="btn btn-light btn-block mb-2">Orders</a>
+            <a href="/manage-address" class="btn btn-light btn-block mb-2">Manage Address</a>
+            <a href="/wallet" class="btn btn-light btn-block mb-2">Wallet</a>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <!-- <h6 class="mb-2 text-primary">Personal Details</h6> -->
+              </div>
+            </div>
+
+            <form id="newAddressForm" method="post" action="/edit-address/<%= address._id %>">
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" value="<%= address.addressName %>" name="addressName" class="form-control" id="fullName">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                </div>
+              </div>
+
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="number" value="<%= address.addressPhone %>" name="addressPhone" class="form-control" id="phone">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Street">Locality</label>
+                    <input type="name" value="<%= address.locality %>" name="locality" class="form-control" id="Street" placeholder="Locality">
+                  </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="ciTy">City</label>
+                    <input type="name" value="<%= address.city %>" name="city" class="form-control" id="ciTy" placeholder="Enter City">
+                  </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="sTate">State</label>
+                    <input type="text" value="<%= address.state %>" name="state" class="form-control" id="sTate" placeholder="Enter State">
+                  </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="zIp">Pin Code</label>
+                    <input type="number" value="<%= address.pincode %>" name="pincode" class="form-control" id="zIp" placeholder="Pin Code">
+                  </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <!-- <label for="address">Address</label> -->
+                    <textarea name="address" id="address" placeholder="Enter your address" cols="50" rows="5"><%= address.address %></textarea>
+                    <script>
+                        // Assuming defaultValueFromServer is set in your server-side script
+                        var defaultValueFromServer = ' <%= address.address %> %>';
+                        document.getElementById('address').value = defaultValueFromServer;
+                    </script>
+                </div>
+                </div>
+              </div>
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  <div class="text-right">
+
+                    <!-- <button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button> -->
+                    <button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+                  </div>
+                </div>
+                <!-- <button type="submit" id="submit" name="submit" class="btn btn-light">Add new address</button> -->
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<%-include('./includes/footerNav.ejs')  %>
+<%-include('./includes/footer.ejs')  %>

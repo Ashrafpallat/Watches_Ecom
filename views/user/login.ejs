@@ -1,0 +1,99 @@
+<%-include('./includes/header.ejs')  %>
+
+	
+	<div class="men_banner">
+		<%-include('./includes/headerNav.ejs')  %>
+
+		<div class="container">
+			<br>
+				<% if (errorMessages.length > 0) { %>
+					<div class="error alert alert-danger" role="alert">
+					  <% errorMessages.forEach(function(message) { %>
+						<%= message %>
+					  <% }); %>
+					</div>
+				  <% } %>
+				  
+				  <% if (successMessages.length > 0) { %>
+					<div class="success alert-success" role="alert">
+					  <% successMessages.forEach(function(message) { %>
+						<%= message %>
+					  <% }); %>
+					</div>
+				  <% } %>
+				  
+
+
+					<br><br>
+					<h3>Account</h3>
+					<div class="col-md-7 account-top">
+						<form method="post" action="/login">
+							<div>
+								<span>Email*</span>
+								<input name="email" type="email" required>
+							</div>
+							<div>
+								<span class="pass">Password*</span>
+								<!-- <input type="password" name="password" id="password"
+										pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+										title="Password must be at least 8 characters long and include at least one letter and one number"
+										required oninvalid="this.setCustomValidity('')"> -->
+								<input type="password" name="password" id="password"
+									pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+									title="Password must be at least 8 characters long and include at least one letter, one number, and one symbol (@, $, !, %, *, ?, or &)"
+									required
+									oninvalid="this.setCustomValidity('')">
+							</div>
+							<input type="submit" value="Login">
+						</form>
+						<a href="/forgot-password" data-bs-toggle="modal" data-bs-target="#addressModal" style="color: grey;">Forgot Password?</a>
+
+						<!-- The Modal -->
+						<div class="modal" id="addressModal">
+							<div class="modal-dialog">
+							  <div class="modal-content">
+		  
+								<!-- Modal Header -->
+								<div class="modal-header">
+								  <p class="modal-title">Enter the Email that associated with the your account</p>
+								  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+								</div>
+		  
+								<!-- Modal Body (Address Form) -->
+								<div class="modal-body">
+								  <form action="/forgot-password" id="checkoutForm" method="post">
+									<!-- Address Name -->
+									<div class="mb-3">
+									  <label for="addressName" class="form-label">Email</label>
+									  <input type="email" class="form-control" name="email" id="addressName" placeholder="example@gmail.com" required>
+									</div>
+									<!-- Modal Footer -->
+									<div class="modal-footer">
+									  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+									  <button type="submit" class="btn btn-primary">Send OTP</button>
+									</div>
+								  </form>
+								</div>
+							  </div>
+							</div>
+						  </div>
+
+					</div>
+					<div class="col-md-5 left-account ">
+						<a href="/register" class="create">Don't have an account, Create</a>
+						<a href="single.html"><img class="img-responsive " src="images/s4.jpg" alt="" /></a>
+						<!-- <div class="five-in">
+								<h1>35% </h1><span>discount</span>
+							</div> -->
+						<div class="clearfix"> </div>
+					</div>
+					<div class="clearfix"> </div>
+		</div>
+	</div>
+	<div class="map">
+		<!-- <iframe
+			src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3150859.767904157!2d-96.62081048651531!3d39.536794757966845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1408111832978">
+		</iframe> -->
+	</div>
+	<%-include('./includes/footerNav.ejs')  %>
+	<%-include('./includes/footer.ejs')  %>

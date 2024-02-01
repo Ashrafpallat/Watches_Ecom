@@ -1,0 +1,231 @@
+<%-include('./includes/header.ejs')  %>
+
+<!-- plugins:css -->
+<link rel="stylesheet" href="../../vendors/feather/feather.css">
+<link rel="stylesheet" href="../../vendors/mdi/css/materialdesignicons.min.css">
+<link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+<link rel="stylesheet" href="../../vendors/typicons/typicons.css">
+<link rel="stylesheet" href="../../vendors/simple-line-icons/css/simple-line-icons.css">
+<link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet" href="../../vendors/select2/select2.min.css">
+<link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
+<!-- endinject -->
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <%-include('./includes/headerNav.ejs')  %>
+
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+
+          <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Edit Product</h4>
+                <p class="card-description">
+                  Basic form elements
+                </p>
+                <!-- <form class="forms-sample" enctype="multipart/form-data" method="post" action="/edit-product/<%= product._id %>">
+                    Existing product data
+                    <input type="hidden" name="_method" value="PUT">
+                    
+                    <div class="form-group">
+                        <label for="exampleInputName1">Title</label>
+                        <input type="text" name="title" class="form-control" id="exampleInputName1" placeholder="Title" value="<%= product.title %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail3">Description</label>
+                        <input type="text" name="description" class="form-control" id="exampleInputEmail3" placeholder="Description" value="<%= product.description %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword4">Price</label>
+                        <input type="number" name="price" class="form-control" id="exampleInputPassword4" placeholder="Price" value="<%= product.price %>">
+                    </div>
+                    <div class="form-group">
+                        <img style="width: 200px; height: auto;" src="\<%= product.imageURL %>" alt="<%= product.imageURL %>" id="imgView" >
+                    </div>
+                    <div class="form-group">
+                        <label>File upload</label>
+                        Use "[]" for multiple file uploads
+                        <input type="file" name="img[]" class="file-upload-default" multiple>
+                        <div class="input-group col-xs-12">
+                            Name attribute should be "image" for a single file upload
+                            <input type="file" class="form-control file-upload-info" name="image" placeholder="Product Image" multiple onchange="viewImage(event)">
+                            <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                            </span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form> -->
+                <form class="forms-sample" enctype="multipart/form-data" method="post" action="/admin/edit-product/<%= product._id %>">
+
+                  <div class="form-group">
+                    <label for="exampleInputName1">Title</label>
+                    <input type="text" name="title" class="form-control" id="exampleInputName1" placeholder="Title" value="<%= product.title %>">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail3">Description</label>
+                    <input type="text" name="description" class="form-control" id="exampleInputEmail3" placeholder="Description" value="<%= product.description %>">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail3">quantity</label>
+                    <input type="text" name="quantity" class="form-control" id="exampleInputEmail3" placeholder="Description" value="<%= product.quantity %>">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword4">Price</label>
+                    <input type="number" name="price" class="form-control" id="exampleInputPassword4" placeholder="Price" value="<%= product.price %>">
+                  </div>
+                  <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select name="category" id="category">
+                        <% categories.forEach(category=> { %>
+                            <% if (category.status==="listed" ) { %>
+                              <option value="<%= category._id %>" >
+                                <%= category.name %>
+                            </option>
+                                <% } %>
+                                    <% }); %>
+                    </select>
+                </div>
+                  <div class="form-group" id="existing-images-container">
+                    <!-- Display existing images with remove buttons -->
+                    <!-- <% product.imageURLs.forEach(function(imageURL, index) { %>
+                          <div class="existing-image-container">
+                              <img style="width: 200px; height: auto; margin-right: 10px;" src="/<%= imageURL %>" alt="<%= imageURL %>">
+                              <button type="button" class="btn btn-danger" onclick="removeExistingImage(<%= index %>)">Remove</button>
+                          </div>
+                      <% }); %> -->
+                    <% for (let i=0; i < product.imageURLs.length; i++) { %>
+                    <div class="existing-image-container">
+                      <img style="width: 100px; height: auto; margin-right: 10px;" src="/<%= product.imageURLs[i] %>" alt="<%= product.imageURLs[i] %>">
+                      <button type="button" class="btn btn-danger" onclick="removeExistingImage('<%= i %>')">Remove</button>
+                    </div>
+                    <% }; %>
+
+                  </div>
+                  <div class="form-group" id="new-images-container">
+                    <!-- Display new image previews -->
+                  </div>
+                  <div class="form-group">
+                    <label>File upload</label>
+                    <div class="input-group col-xs-12">
+                      <!-- Name attribute should be "images" for multiple file uploads -->
+                      <input type="file" class="form-control file-upload-info" name="images" placeholder="Product Images" multiple onchange="viewImages(event)">
+                      <span class="input-group-append">
+                        <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                      </span>
+                    </div>
+                  </div>
+                  <input type="hidden" name="removedExistingImages" id="removed-existing-images-input" value="">
+
+                  <!-- <button type="submit" class="btn btn-primary me-2">Submit</button> -->
+                  <button type="submit" class="btn btn-primary me-2" onclick="prepareFormSubmission()">Submit</button>
+                  <button class="btn btn-light">Cancel</button>
+                  <script>
+                    var removedExistingImages = []; // Initialize an array to store removed existing image URLs
+
+                    function viewImages(event) {
+                      // ... (omitted for brevity)
+                    }
+
+                    function removeExistingImage(index) {
+                      console.log('Removing existing image at index:', index);
+                      var existingImagesContainer = document.getElementById('existing-images-container');
+                      var existingImageContainers = existingImagesContainer.getElementsByClassName('existing-image-container');
+
+                      if (index >= 0 && index < existingImageContainers.length) {
+                        const removedExistingImagesInput = document.getElementById('removed-existing-images-input');
+                        var removedImageUrl = existingImageContainers[index].querySelector('img').src;
+
+                        // Remove the base URL (http://localhost:5000) from the image path
+                        var baseUrl = 'http://localhost:5000'; // Replace this with your actual base URL
+                        removedImageUrl = removedImageUrl.replace(baseUrl, '');
+
+                        removedExistingImages.push(removedImageUrl);
+                        console.log('Removed Images:', removedExistingImages);
+                        existingImagesContainer.removeChild(existingImageContainers[index]);
+
+                        var removeButtons = existingImagesContainer.querySelectorAll('.existing-image-container button');
+                        for (var i = index; i < removeButtons.length; i++) {
+                          removeButtons[i].setAttribute('onclick', 'removeExistingImage(' + i + ')');
+                        }
+
+                        removedExistingImagesInput.value = JSON.stringify(removedExistingImages);
+                      }
+                    }
+
+                    function removeNewImage(imageContainer) {
+                      var newImagesContainer = document.getElementById('new-images-container');
+                      newImagesContainer.removeChild(imageContainer);
+                    }
+
+                    function prepareFormSubmission() {
+                      const removedExistingImagesInput = document.getElementById('removed-existing-images-input');
+                      removedExistingImagesInput.value = JSON.stringify(removedExistingImages);
+                      console.log('Removed Images:', removedExistingImages);
+                    }
+                  </script>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from
+            BootstrapDash.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights
+            reserved.</span>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="../../vendors/select2/select2.min.js"></script>
+  <script src="../../vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="../../js/off-canvas.js"></script>
+  <script src="../../js/hoverable-collapse.js"></script>
+  <script src="../../js/template.js"></script>
+  <script src="../../js/settings.js"></script>
+  <script src="../../js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="../../js/file-upload.js"></script>
+  <script src="../../js/typeahead.js"></script>
+  <script src="../../js/select2.js"></script>
+  <!-- End custom js for this page-->
+</body>
+
+</html>
+
+<script>
+  function viewImage(event) {
+    document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0])
+  }
+</script>

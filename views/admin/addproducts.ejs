@@ -1,0 +1,218 @@
+<%-include('./includes/header.ejs')  %>
+
+</head>
+
+<body>
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <%-include('./includes/headerNav.ejs')  %>
+
+
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Add Product</h4>
+                                    <!-- <p class="card-description">
+                                        Basic form elements
+                                    </p> -->
+                                    <form class="forms-sample" enctype="multipart/form-data" method="post"
+                                        action="/admin/addproducts">
+                                        <div class="form-group">
+                                            <label for="exampleInputName1">Title</label>
+                                            <input type="text" name="title" class="form-control" id="exampleInputName1"
+                                                required placeholder="Title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail3">Description</label>
+                                            <input type="text" name="description" class="form-control" required
+                                                id="exampleInputEmail3" placeholder="Description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword4">Price</label>
+                                            <input type="number" name="price" class="form-control" min="0" required
+                                                id="exampleInputPassword4" placeholder="Price">
+                                        </div>
+                                        <!-- <div class="form-group">
+                      <label for="exampleSelectGender">Gender</label>
+                        <select class="form-control" id="exampleSelectGender">
+                          <option>Male</option>
+                          <option>Female</option>
+                        </select>
+                      </div> -->
+                                        <!-- <div class="form-group">
+                                            <label for="category">Category:</label>
+                                            <select name="category" id="category">
+                                                <option value="electronics">Electronics</option>
+                                                <option value="clothing">Clothing</option>
+                                                Add more options based on your product categories
+                                            </select>
+
+                                        </div>   -->
+                                        <div class="form-group">
+                                            <label for="category">Category:</label>
+                                            <select name="category" id="category">
+                                                <% categories.forEach(category=> { %>
+                                                    <% if (category.status==="listed" ) { %>
+                                                        <option value="<%= category._id %>">
+                                                            <%= category.name %>
+                                                        </option>
+                                                        <% } %>
+                                                            <% }); %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword4">Quanitty</label>
+                                            <input type="number" name="quantity" class="form-control"
+                                                id="exampleInputPassword4" placeholder="Quanitty" min="0" required>
+                                        </div>
+                                        <div class="form-group">
+                                            
+                                            <!-- image preview area -->
+                                            <div id="image-preview-container"></div> 
+
+                                            <label>File upload</label>
+                                            <!-- <input type="file" name="img[]" class="file-upload-default"> -->
+                                            <div class="input-group col-xs-12">
+                                                <!-- <input type="file" class="form-control file-upload-info" name="images" multiple required
+                                                    placeholder="Product Image"> -->
+                                                    <!-- Your custom-styled button to trigger file input -->
+                                                    <label for="file-input" class="btn btn-light">Choose Images</label>
+                                                    <input type="file" id="file-input" class="visually-hidden" name="images" accept=".jpg, .jpeg, .png, .bmp, .webp" multiple required
+                                                           onchange="previewImages(this)">
+                                                    
+                                                    <style>
+                                                    .visually-hidden {
+                                                        position: absolute;
+                                                        width: 1px;
+                                                        height: 1px;
+                                                        margin: -1px;
+                                                        padding: 0;
+                                                        overflow: hidden;
+                                                        clip: rect(0, 0, 0, 0);
+                                                        border: 0;
+                                                    }
+                                                    </style>
+                                                <!-- <span class="input-group-append">
+                                                    <button class="file-upload-browse btn btn-primary" type="button"
+                                                        multiple>Upload</button>
+                                                </span> -->
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group">
+                      <label for="exampleInputCity1">City</label>
+                      <input type="text" class="form-control" id="exampleInputCity1" placeholder="Location">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleTextarea1">Textarea</label>
+                      <textarea class="form-control" id="exampleTextarea1" rows="4"></textarea>
+                    </div> -->
+                                        <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                        <button class="btn btn-light">Cancel</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!--  -->
+                    </div>
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:../../partials/_footer.html -->
+                <%-include('./includes/footerNav.ejs')  %>
+
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="../../vendors/select2/select2.min.js"></script>
+    <script src="../../vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../js/off-canvas.js"></script>
+    <script src="../../js/hoverable-collapse.js"></script>
+    <script src="../../js/template.js"></script>
+    <script src="../../js/settings.js"></script>
+    <script src="../../js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="../../js/file-upload.js"></script>
+    <script src="../../js/typeahead.js"></script>
+    <script src="../../js/select2.js"></script>
+    <!-- End custom js for this page-->
+
+    <script>
+        function previewImages(input) {
+            var previewContainer = document.getElementById('image-preview-container');
+            previewContainer.innerHTML = ''; // Clear previous previews
+        
+            var files = input.files;
+        
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+        
+                reader.onload = function (e) {
+                    var image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.classList.add('preview-image');
+        
+                    var removeButton = document.createElement('button');
+                    removeButton.innerText = 'Remove';
+                    removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
+                    removeButton.addEventListener('click', function () {
+                        var imageContainer = removeButton.parentNode;
+                        previewContainer.removeChild(imageContainer);
+                        input.value = ''; // Clear the file input only if no files remain
+        
+                        // Check if there are remaining selected files
+                        if (input.files.length > 0) {
+                            previewImages(input);
+                        }
+                    });
+        
+                    var imageContainer = document.createElement('div');
+                    imageContainer.classList.add('preview-image-container');
+                    imageContainer.appendChild(image);
+                    imageContainer.appendChild(removeButton);
+        
+                    previewContainer.appendChild(imageContainer);
+                };
+        
+                reader.readAsDataURL(files[i]);
+            }
+        }
+        </script>
+        
+        
+
+<style>
+    .preview-image-container {
+        position: relative;
+        display: inline-block;
+        margin: 5px;
+    }
+    
+    .preview-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+    
+    .remove-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 2px 5px;
+    }
+    </style>
+    
+        
+
+</body>
+
+</html>

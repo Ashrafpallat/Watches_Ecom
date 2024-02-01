@@ -1,0 +1,430 @@
+<%-include('./includes/header.ejs')  %>
+
+<div class="men_banner">
+
+  <%- include('./includes/headerNav.ejs', { cartItemsLength: cart && cart.items ? cart.items.length : 0 }) %>
+
+  <section class="bg-light py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 col-lg-8 mb-4">
+
+
+          <!-- Checkout -->
+          <div class="card shadow-0 border">
+            <div class="p-4">
+              <h5 class="card-title mb-3">Saved address</h5>
+              <div class="row mb-3">
+                <% addresses.forEach(address => { %>
+
+                <div class="col-lg-4 mb-3">
+                  <!-- Default radio -->
+                  <div class="form-check h-100 border rounded-3">
+                    <div class="p-3">
+                      <input class="form-check-input" type="radio" name="selectedAddress" value="<%= address.addressName %> <%= address.addressPhone %> <%= address.locality %> <%= address.city %> <%= address.state %> <%= address.pincode %> <%= address.address %>" id="flexRadioDefault" />
+
+                      <label class="form-check-label" for="selectedAddress">
+                        <%= address.addressName %>
+                        <br />
+                        <small class="text-muted"><%= address.address %> </small>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <% }); %>
+
+              </div>
+
+              <div class="row">
+                <!-- <h6 class="mb-0 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addressModal"> Add new address</h6> -->
+                <br><br>
+                <div class="float-end">
+                  <span class="bi bi-plus"></span>
+                  <button class="btn btn-link shadow-0 border" data-bs-toggle="modal" data-bs-target="#addressModal">Add a new address</button>
+                  <!-- <button class="btn btn-success shadow-0 border">Continue</button> -->
+                </div>
+                <!-- Button to Open the Modal -->
+                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal">
+                  Open Address Form
+                </button> -->
+
+                <!-- The Modal -->
+                <div class="modal" id="addressModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Address Form</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal Body (Address Form) -->
+                      <div class="modal-body">
+                        <form action="/checkout" id="checkoutForm" method="post">
+                          <!-- Address Name -->
+                          <div class="mb-3">
+                            <label for="addressName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" name="addressName" id="addressName" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="addressName" class="form-label">Phone</label>
+                            <input type="number" class="form-control" name="addressPhone" id="addressPhone" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="addressName" class="form-label">Locality</label>
+                            <input type="text" class="form-control" name="locality" id="locality" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="addressName" class="form-label">City </label>
+                            <input type="text" class="form-control" name="city" id="addressName" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="addressName" class="form-label">State </label>
+                            <input type="text" class="form-control" name="state" id="addressName" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="addressName" class="form-label">Pin Code </label>
+                            <input type="number" class="form-control" name="pincode" id="addressName" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="addressName" class="form-label"> </label>
+                            <textarea name="address" id="" cols="60" rows="5" required placeholder="Address"></textarea>
+                          </div>
+
+                          <!-- Modal Footer -->
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add Address</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="col-sm-8 mb-3">
+                  <!-- <p class="mb-0"> Full name</p>
+
+                  <div class="form-outline">
+                    <input type="text" name="addressName" id="typeText" placeholder="" class="form-control" />
+                  </div> -->
+                </div>
+
+                <div class="col-sm-4 mb-3">
+                  <!-- <p class="mb-0">Locality</p>
+                  <input type="text" name="locality" id="typeText" placeholder="" class="form-control" /> -->
+                </div>
+                <div class="col-sm-4 mb-3">
+                  <!-- <p class="mb-0">City</p>
+                  <input type="text" name="city" id="typeText" placeholder="" class="form-control" /> -->
+                </div>
+
+                <div class="col-sm-4 mb-3">
+                  <!-- <p class="mb-0">Phone</p>
+                  <div class="form-outline">
+                    <input type="number" name="addressPhone" id="typeText" placeholder="" class="form-control" />
+                  </div> -->
+                </div>
+
+                <div class="col-sm-4 mb-3">
+                  <!-- <p class="mb-0">State</p>
+                  <input type="text" name="state" id="typeText" placeholder="" class="form-control" /> -->
+                </div>
+
+                <div class="col-sm-4 col-6 mb-3">
+                  <!-- <p class="mb-0">Pin code</p>
+                  <div class="form-outline">
+                    <input type="number" name="pincode" id="typeText" class="form-control" />
+                  </div> -->
+                </div>
+
+                <div class="col-sm-4 col-6 mb-3">
+                  <!-- <p class="mb-0">Address</p>
+                  <div class="form-outline">
+                    <textarea name="" name="address" id="" cols="69" rows="3"></textarea>
+                  </div> -->
+                </div>
+              </div>
+
+              <div class="form-check mb-3">
+                <!-- <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" /> -->
+                <!-- <label class="form-check-label" for="flexCheckDefault1">Save this address</label> -->
+              </div>
+
+
+
+              <div class="float-end">
+                <!-- <button class="btn btn-light border">Cancel</button> -->
+                <!-- <button class="btn btn-success shadow-0 border">Continue</button> -->
+              </div>
+            </div>
+          </div>
+          <!-- Checkout -->
+        </div>
+        <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+          <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+            <h6 class="text-dark my-4">Items in cart</h6>
+
+            <!-- <div class="d-flex align-items-center mb-4">
+              <div class="me-3 position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                  1
+                </span>
+                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+              </div>
+              <div class="">
+                <a href="#" class="nav-link">
+                  Gaming Headset with Mic <br />
+                  Darkblue color
+                </a>
+                <div class="price text-muted">Total: $295.99</div>
+              </div>
+            </div> -->
+
+            <!-- <div class="d-flex align-items-center mb-4">
+              <div class="me-3 position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                  1
+                </span>
+                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+              </div>
+              <div class="">
+                <a href="#" class="nav-link">
+                  Apple Watch Series 4 Space <br />
+                  Large size
+                </a>
+                <div class="price text-muted">Total: $217.99</div>
+              </div>
+            </div> -->
+            <% cart.items.forEach(item => { %>
+            <div class="d-flex align-items-center mb-4">
+              <div class="me-3 position-relative">
+                <!-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                  3
+                </span> -->
+                <img src="<%= item.productId.imageURLs[3] %>" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+              </div>
+              <div class="">
+                <a href="#" class="nav-link"><%= item.productId.title %></a>
+                <p style="font-size: small;">Qty: <%= item.quantity %></p>
+                <div class="price text-muted">Price: <%= item.productId.price %></div>
+                <input type="hidden" name="items" value="<%= item %>" id="">
+              </div>
+            </div>
+            <% }) %>
+
+            <!-- Function to calculate the price -->
+            <% function calculateTotalPrice(items) { %>
+            <% let totalPrice = 0; %>
+            <% items.forEach(item => { %>
+            <% totalPrice += item.productId.price * item.quantity; %>
+            <% }); %>
+            <% totalPrice -= discountAmount %>
+            <%= totalPrice.toFixed(2) %>
+            <!-- Assuming totalPrice is a decimal number -->
+
+            <input type="hidden" value=" <%= totalPrice.toFixed(2) %>" id="total">
+            <% } %>
+
+            <h6 class="mb-3">Summary</h6>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Total price:</p>
+              <p class="mb-2"><%= cart && cart.items.length > 0 ? calculateTotalPrice(cart.items) : '0.00' %></p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Discount: </p>
+              <p class="mb-2 text-danger"> <%= discountAmount %></p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Shipping cost:</p>
+              <p class="mb-2">0</p>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Final price:</p>
+              <p class="mb-2 fw-bold" id="totalPrice"><%= cart && cart.items.length > 0 ? calculateTotalPrice(cart.items) : '0.00' %></p>
+            </div>
+
+            <!-- <div class="input-group mt-3 mb-4">
+              <input type="text" class="form-control border" name="" placeholder="Promo code" />
+              <button class="btn btn-light text-primary border">Apply</button>
+            </div> -->
+            <hr />
+            <form>
+              <div class="mb-3">
+                <label class="form-label">Select Payment Method:</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="paymentMethod" id="onlinePayment" value="online">
+                  <label class="form-check-label" for="onlinePayment">
+                    Online Payment (Razorpay)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery" value="COD">
+                  <label class="form-check-label" for="cashOnDelivery">
+                    Cash on Delivery
+                  </label>
+
+
+                </div>
+              </div>
+              <button onclick="addressGive(event)" class="btn btn-success shadow-0 border">Place order</button>
+            </form>
+
+
+            <!-- <h6 class="text-dark my-4">Items in cart</h6>
+            <div class="d-flex align-items-center mb-4">
+              <div class="me-3 position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                  1
+                </span>
+                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+              </div>
+              <div class="">
+                <a href="#" class="nav-link">
+                  Gaming Headset with Mic <br />
+                  Darkblue color
+                </a>
+                <div class="price text-muted">Total: $295.99</div>
+              </div>
+            </div> -->
+
+            <!-- <div class="d-flex align-items-center mb-4">
+              <div class="me-3 position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                  1
+                </span>
+                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+              </div>
+              <div class="">
+                <a href="#" class="nav-link">
+                  Apple Watch Series 4 Space <br />
+                  Large size
+                </a>
+                <div class="price text-muted">Total: $217.99</div>
+              </div>
+            </div> -->
+
+            <!-- <div class="d-flex align-items-center mb-4">
+              <div class="me-3 position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                  3
+                </span>
+                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+              </div>
+              <div class="">
+                <a href="#" class="nav-link">GoPro HERO6 4K Action Camera - Black</a>
+                <div class="price text-muted">Total: $910.00</div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</section>
+<%-include('./includes/footerNav.ejs')  %>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  async function addressGive(event) {
+    event.preventDefault()
+    var addressRadio = document.querySelector('input[name="selectedAddress"]:checked')
+    var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value
+    var paymentMethodRadio = document.querySelector('input[name="paymentMethod"]:checked');
+
+    if (!addressRadio || !paymentMethodRadio) {
+      alert("Please select both an address and a payment method.");
+      return;
+    }
+
+    console.log('address ', addressRadio);
+    console.log('selected payment ', paymentMethod)
+    const address = addressRadio.value
+    const totalAmount = document.getElementById('total').value
+    $.ajax({
+      type: 'POST',
+      data: {
+        selectedAddress: address,
+        totalAmount: totalAmount,
+        paymentMethod: paymentMethod
+      },
+      url: "/place-order",
+      success: function(response) {
+        if (response.codSuccess === true) {
+          Swal.fire({
+            title: "",
+            text: "Order placed successfully",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000, // Set the delay in milliseconds
+          });
+          setTimeout(() => {
+            window.location.href = '/order-placed';
+          }, 2000);
+        } else {
+          razorpayPayment(response.razorpayOrder);
+        }
+
+      }
+    })
+
+
+    function razorpayPayment(order) {
+      console.log('razorder', order);
+      console.log(order.amount);
+
+      var options = {
+        "key": 'rzp_test_WMFGNMq1lP6s4b', // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Watches  ",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function(response) {
+          // alert(response.razorpay_payment_id);
+          // alert(response.razorpay_order_id);
+          // alert(response.razorpay_signature);
+          verifyPayment(response, order)
+        },
+        "prefill": {
+          "name": "Gaurav Kumar",
+          "email": "gaurav.kumar@example.com",
+          "contact": "9000090000"
+        },
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#F9D9BE"
+        }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+
+    }
+
+    function verifyPayment(response, order) {
+      console.log('verifyPayment called');
+      $.ajax({
+        url: '/verifyPayment',
+        method: 'post',
+        data: {
+          response,
+          order,
+        },
+        success: (response) => {
+          if(response.status){
+            window.location.href = '/order-placed';
+          }
+        }
+      })
+    }
+  }
+</script>
+
+<%-include('./includes/footer.ejs')  %>
