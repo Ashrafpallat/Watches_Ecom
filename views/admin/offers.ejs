@@ -1,6 +1,7 @@
 <%-include('./includes/header.ejs')  %>
 
 </head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <body>
   <div class="container-scroller">
@@ -13,35 +14,26 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">All Coupons</h4>
+                <h4 class="card-title">All Products</h4>
                 <p class="card-description">
                   <!-- Add class <code>.table-striped</code> -->
                 </p>
-                <a href="/admin/addcoupon"><button type="button" class="btn btn-primary">Add Coupons</button></a>
+                <a href="/admin/add-offer"><button type="button" class="btn btn-primary">Add Offers</button></a>
                 <div class="table-responsive">
-                  <table class="table table-striped" id="myTable">
+                  <table class="table table-striped">
                     <thead>
                       <tr>
                         <th>
-                          Sl No
+                          Title
                         </th>
                         <th>
-                          Name
+                          Starting date
                         </th>
                         <th>
-                          Code
+                          Expiry date
                         </th>
                         <th>
-                          Description
-                        </th>
-                        <th>
-                          Expiry Date
-                        </th>
-                        <th>
-                          Disc Amount
-                        </th>
-                        <th>
-                          Min Amount
+                          Percentage
                         </th>
                         <th>
                           Status
@@ -52,44 +44,40 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% coupon.forEach(coupon=> { %>
+                      <% offers.forEach(offer => { %>
 
                       <tr>
-                        <td>
-                          <%= coupon.couponName %>
+                        <td class="py-1">
+                          <%= offer.title %>
                         </td>
                         <td>
-                          <%= coupon.couponCode %>
+                          <%= offer.startingDate.toLocaleDateString() %>
                         </td>
                         <td>
-                          <%= coupon.couponDescription %>
+                          <%= offer.expiryDate.toLocaleDateString() %>
+                          <!-- <div class="progress">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
                         </td>
                         <td>
-                          <%= coupon.expiryDate.toLocaleDateString() %>
+                          <%= offer.percentage %> %
                         </td>
                         <td>
-                          <%= coupon.discountAmount %>
-                        </td>
-                        <td>
-                          <%= coupon.minAmount %>
-                        </td>
-                        <td>
-                          <%= coupon.status %>
-
+                          <%= offer.status %>
                         </td>
                         <td>
                           <div style="margin-bottom: 5px;">
-                            <% if(coupon.status=='Active'){ %>
-                            <a href="" class="btn btn-sm  btn-danger" style="width: 100px;" onclick="unlistCoupon(event,'<%=coupon._id  %>');">Unlist</a>
+                            <% if(offer.status=='Active'){ %>
+                            <a href="" class="btn btn-sm  btn-danger" style="width: 100px;" onclick="unlistOffer(event,'<%=offer._id  %>');">Unlist</a>
 
                             <% }else{ %>
-                            <a href="" class="btn btn-sm btn-success" style="width: 100px;" onclick="listCoupon(event,'<%=coupon._id  %>');">List</a>
+                            <a href="" class="btn btn-sm btn-success" style="width: 100px;" onclick="listOffer(event,'<%=offer._id  %>');">List</a>
                             <% } %>
+                          </div>
                         </td>
-
                       </tr>
+                      <% }) %>
 
-                      <% }); %>
                     </tbody>
                   </table>
                 </div>
@@ -130,26 +118,7 @@
     <!-- Custom js for this page-->
     <!-- End custom js for this page-->
     <script>
-      function addSerialNumbersToTable(tableId) {
-        var table = document.getElementById(tableId);
-        var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
-        // Iterate over the rows and add serial numbers
-        for (var i = 0; i < rows.length; i++) {
-          // Create a new cell for the serial number
-          var cell = rows[i].insertCell(0);
-          // Add the serial number to the cell (starting from 1)
-          cell.textContent = i + 1;
-        }
-      }
-
-      // Call the function to add serial numbers to the table with ID 'myTable'
-      addSerialNumbersToTable('myTable');
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-      async function listCoupon(event, couponId) {
+      async function listOffer(event, offerId) {
         event.preventDefault(); // Prevent the default behavior of the anchor
 
         Swal.fire({
@@ -166,9 +135,9 @@
               const response = await $.ajax({
                 type: 'POST',
                 data: {
-                  couponId: couponId
+                  offerId: offerId
                 },
-                url: '/admin/listcoupon',
+                url: '/admin/list-offer',
               });
 
               if (response.success) {
@@ -176,7 +145,8 @@
                   title: "",
                   text: "Successfully listed!",
                   icon: "success"
-                });setTimeout(() => {
+                });
+                setTimeout(() => {
                   window.location.href = window.location.href;
                 }, 1000);
 
@@ -190,7 +160,7 @@
         });
       }
 
-      async function unlistCoupon(event, couponId) {
+      async function unlistOffer(event, offerId) {
         event.preventDefault(); // Prevent the default behavior of the anchor
 
         Swal.fire({
@@ -207,9 +177,9 @@
               const response = await $.ajax({
                 type: 'POST',
                 data: {
-                  couponId: couponId
+                  offerId: offerId
                 },
-                url: '/admin/unlistcoupon',
+                url: '/admin/unlist-offer',
               });
 
               if (response.success) {
@@ -217,7 +187,8 @@
                   title: "",
                   text: "Successfully unlisted!",
                   icon: "success"
-                });setTimeout(() => {
+                });
+                setTimeout(() => {
                   window.location.href = window.location.href;
                 }, 1000);
 

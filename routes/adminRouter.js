@@ -10,6 +10,7 @@ const categoryController = require('../controller/catogoryController')
 const productController = require('../controller/productController');
 const couponController = require('../controller/couponController');
 const orderController = require('../controller/orderController');
+const offerController = require('../controller/offerController')
 const multer = require('multer');
 // adminRouter.use(express.static(path.join(__dirname, 'assets', 'productImages'))) // destination for file uploads
 
@@ -40,9 +41,9 @@ adminRouter.route('/addproducts')
   .post(auth.isAdminLogin, productController.addproducts);
 adminRouter.route('/edit-product/:productId')
   .get(auth.isAdminLogin, adminController.loadEditProduct)
-  .post(auth.isAdminLogin,  productController.editProduct);
-adminRouter.post('/listproduct', auth.isAdminLogin,  productController.listProduct);
-adminRouter.post('/unlistproduct', auth.isAdminLogin,  productController.unlistProduct);
+  .post(auth.isAdminLogin, productController.editProduct);
+adminRouter.post('/listproduct', auth.isAdminLogin, productController.listProduct);
+adminRouter.post('/unlistproduct', auth.isAdminLogin, productController.unlistProduct);
 //  User management
 adminRouter.get('/allusers', auth.isAdminLogin, adminController.loadUsers)
 adminRouter.post('/block-user', auth.isAdminLogin, adminController.blockUser);
@@ -60,14 +61,23 @@ adminRouter.get('/listcategory/:categoryId', auth.isAdminLogin, categoryControll
 // Coupon management
 adminRouter.get('/coupons', auth.isAdminLogin, adminController.loadCoupons);
 adminRouter.get('/addcoupon', auth.isAdminLogin, couponController.loadAddCoupons)
-adminRouter.post("/addcoupon", couponController.addCoupon) 
+adminRouter.post("/addcoupon", couponController.addCoupon)
 adminRouter.post('/listcoupon', couponController.listCoupon)
 adminRouter.post('/unlistcoupon', couponController.unlistCoupon)
 // Order management
-adminRouter.get('/orders', auth.isAdminLogin,orderController.loadOrders)
+adminRouter.get('/orders', auth.isAdminLogin, orderController.loadOrders)
 adminRouter.get('/ordered-items/:orderId', auth.isAdminLogin, orderController.loadOrderedItems)
 adminRouter.post('/change-order-status', orderController.changeOrderStatus)
 adminRouter.get('/accept-return/:orderId', orderController.acceptRetrun)
+// Offer management
+adminRouter.get('/offers', auth.isAdminLogin, offerController.loadOffers)
+adminRouter.route('/add-offer')
+  .get(auth.isAdminLogin, offerController.loadAddOffer)
+  .post(offerController.addOffer)
+adminRouter.post('/list-offer', offerController.listOffer)
+adminRouter.post('/unlist-offer', offerController.unlistOffer)
+
+
 adminRouter.get('/adminlogout', auth.isAdminLogout, adminController.loadLogout)
 module.exports = adminRouter;
 

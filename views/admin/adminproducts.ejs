@@ -158,10 +158,12 @@
                   title: "",
                   text: "Successfully listed!",
                   icon: "success"
-                });
+                });setTimeout(() => {
+                  window.location.href = window.location.href;
+                }, 1000);
       
                 // Optionally, you can refresh the page
-                window.location.href = window.location.href;
+                // window.location.href = window.location.href;
               }
             } catch (error) {
               console.error(error);
@@ -195,10 +197,12 @@
                   title: "",
                   text: "Successfully unlisted!",
                   icon: "success"
-                });
+                });setTimeout(() => {
+                  window.location.href = window.location.href;
+                }, 1000);
       
                 // Optionally, you can refresh the page
-                window.location.href = window.location.href;
+                // window.location.href = window.location.href;
               }
             } catch (error) {
               console.error(error);
