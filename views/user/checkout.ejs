@@ -210,7 +210,13 @@
               <div class="">
                 <a href="#" class="nav-link"><%= item.productId.title %></a>
                 <p style="font-size: small;">Qty: <%= item.quantity %></p>
-                <div class="price text-muted">Price: <%= item.productId.price %></div>
+                <% if (item.productId.offer && item.productId.offer.percentage) { %>
+                 <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
+                <div class="price text-muted">Price: <%= discountedPrice %></div>
+                <% } else { %>
+                <div class="price text-muted">Price: <%= item.price %></div>
+                <% } %>
+                
                 <input type="hidden" name="items" value="<%= item %>" id="">
               </div>
             </div>
@@ -220,7 +226,13 @@
             <% function calculateTotalPrice(items) { %>
             <% let totalPrice = 0; %>
             <% items.forEach(item => { %>
-            <% totalPrice += item.productId.price * item.quantity; %>
+              
+            <% if (item.productId.offer && item.productId.offer.percentage) { %>
+              <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
+            <% totalPrice += discountedPrice * item.quantity; %>
+            <% } else { %>
+             <% totalPrice += item.productId.price * item.quantity; %>
+            <% } %>
             <% }); %>
             <% totalPrice -= discountAmount %>
             <%= totalPrice.toFixed(2) %>
@@ -418,7 +430,7 @@
           order,
         },
         success: (response) => {
-          if(response.status){
+          if (response.status) {
             window.location.href = '/order-placed';
           }
         }

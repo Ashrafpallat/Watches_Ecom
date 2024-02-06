@@ -74,8 +74,9 @@ adminRouter.get('/offers', auth.isAdminLogin, offerController.loadOffers)
 adminRouter.route('/add-offer')
   .get(auth.isAdminLogin, offerController.loadAddOffer)
   .post(offerController.addOffer)
-adminRouter.post('/list-offer', offerController.listOffer)
-adminRouter.post('/unlist-offer', offerController.unlistOffer)
+// adminRouter.post('/list-offer', offerController.listOffer)
+// adminRouter.post('/unlist-offer', offerController.unlistOffer)
+adminRouter.post('/delete-offer', offerController.deleteOffer)
 
 
 adminRouter.get('/adminlogout', auth.isAdminLogout, adminController.loadLogout)

@@ -8,7 +8,7 @@ const categorySchema = new mongoose.Schema({
     required: true
   },
 
-  description: { 
+  description: {
     type: String,
     required: true
   },
@@ -17,6 +17,10 @@ const categorySchema = new mongoose.Schema({
     type: String,
     enum: ['listed', 'unlisted'],
     default: 'listed'
+  },
+  offer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Offer',
   },
 
 });

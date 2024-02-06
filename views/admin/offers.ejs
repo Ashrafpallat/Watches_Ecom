@@ -67,17 +67,17 @@
                         </td>
                         <td>
                           <div style="margin-bottom: 5px;">
-                            <% if(offer.status=='Active'){ %>
+                            <!-- <% if(offer.status=='Active'){ %>
                             <a href="" class="btn btn-sm  btn-danger" style="width: 100px;" onclick="unlistOffer(event,'<%=offer._id  %>');">Unlist</a>
 
                             <% }else{ %>
                             <a href="" class="btn btn-sm btn-success" style="width: 100px;" onclick="listOffer(event,'<%=offer._id  %>');">List</a>
-                            <% } %>
+                            <% } %> -->
+                            <a href="" class="btn btn-sm  btn-danger" style="width: 100px;" onclick="deletetOffer(event,'<%=offer._id  %>');">Delete</a>
                           </div>
                         </td>
                       </tr>
                       <% }) %>
-
                     </tbody>
                   </table>
                 </div>
@@ -160,7 +160,7 @@
         });
       }
 
-      async function unlistOffer(event, offerId) {
+      async function deletetOffer(event, offerId) {
         event.preventDefault(); // Prevent the default behavior of the anchor
 
         Swal.fire({
@@ -179,7 +179,7 @@
                 data: {
                   offerId: offerId
                 },
-                url: '/admin/unlist-offer',
+                url: '/admin/delete-offer',
               });
 
               if (response.success) {

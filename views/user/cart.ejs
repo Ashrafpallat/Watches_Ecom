@@ -92,7 +92,19 @@
                     </li>
                   </ul>
                   <div class="delivery">
-                    <p>Price : <%= item.productId.price %></p>
+                    <strong>
+                      <p>
+                        Price: ₹
+                        <% if (item.productId.offer && item.productId.offer.percentage) { %>
+                        <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
+                        <%= discountedPrice.toFixed(2) %>
+                        <del style="color: rgb(129, 127, 127); font-weight: normal;">₹<%= item.productId.price.toFixed(2) %></del>
+                        <% } else { %>
+                        <%= item.productId.price.toFixed(2) %>
+                        <% } %>
+                      </p>
+
+                    </strong>
                     <span>Delivered in 2-3 business days</span>
                     <div class="clearfix"></div>
                   </div>
@@ -126,7 +138,12 @@
                 <% function calculateTotalPrice(items, couponDiscount) { %>
                 <% let totalPrice = 0; %>
                 <% items.forEach(item => { %>
+                <% if (item.productId.offer && item.productId.offer.percentage) { %>
+                <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
+                <% totalPrice += discountedPrice * item.quantity; %>
+                <% } else { %>
                 <% totalPrice += item.productId.price * item.quantity; %>
+                <% } %>
                 <% }); %>
                 <% if (couponDiscount !== undefined) { %>
                 <% totalPrice -= couponDiscount; %>
@@ -138,7 +155,10 @@
               </span>
 
               <span>Discount</span>
-              <span class="total1"><%= couponDiscount %></span>
+              <span class="total1" >
+                <%= couponDiscount %>
+                <%=  %>
+              </span>
               <span>Delivery Charges</span>
               <!-- <span class="total1">150.00</span> -->
               <div class="clearfix"></div>

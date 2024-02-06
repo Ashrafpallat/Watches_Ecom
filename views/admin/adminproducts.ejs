@@ -42,6 +42,9 @@
                           Price
                         </th>
                         <th>
+                          Offer
+                        </th>
+                        <th>
                           Action
                         </th>
                       </tr>
@@ -69,6 +72,13 @@
                         </td>
                         <td>
                           <%= product.price %>
+                        </td>
+                        <td>
+                          <% if (product.offer) { %>
+                          <%= product.offer.title  %>
+                           <% } else { %>
+                            Nil
+                          <% } %>
                         </td>
                         <td>
                           <div style="margin-bottom: 5px;">

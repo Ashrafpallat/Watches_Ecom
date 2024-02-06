@@ -5,6 +5,7 @@ const { use } = require('../routes/userRouter');
 const Category = require('../model/category_model');
 const Coupon = require('../model/coupon-model');
 const orderModel = require('../model/order-model');
+const offer = require('../model/offer-model')
 
 const loadlogin = (req, res) => {
     try {
@@ -63,8 +64,10 @@ const loadLogout = async (req, res) => {
 const loadProducts = async (req, res) => {
     try {
         const adminData = await User.findById({ _id: req.session.admin_id });
-        // const products = await Products.find(); // Fetch products from MongoDB
-        const products = await Products.find().populate('category');
+        const products = await Products.find().populate([
+            { path: 'category' },
+            { path: 'offer' }
+        ]);
         res.render('admin/adminproducts', { user: adminData, products: products }); // Pass products to the view
     } catch (error) {
         console.log(error.message);

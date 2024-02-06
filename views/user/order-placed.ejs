@@ -26,11 +26,17 @@
                 </thead>
                 <tbody>
                   <% order.items.forEach(item => { %>
-                    <tr>
-                      <td><%= item.product.title %></td>
-                      <td><%= item.quantity %></td>
-                      <td><%= item.price %></td>
-                    </tr>
+                  <tr>
+                    <td><%= item.product.title %></td>
+                    <td><%= item.quantity %></td>
+                    <% if (item.product.offer && item.product.offer.percentage) { %>
+                    <% const discountedPrice = item.product.price - (item.product.price * (item.product.offer.percentage / 100)); %>
+                    <td><%= discountedPrice %></td>
+                    <% } else { %>
+                    <td><%= item.price %></td>
+                    <% } %>
+
+                  </tr>
                   <% }); %>
                 </tbody>
               </table>
@@ -44,7 +50,7 @@
 
               <!-- Show Orders Button -->
               <a href="/my-orders" class="btn btn-success mt-3">Show Orders</a>
-              
+
               <!-- ... (existing content remains unchanged) ... -->
             </div>
           </div>

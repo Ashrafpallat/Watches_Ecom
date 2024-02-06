@@ -154,7 +154,15 @@
               <div class="view view-first">
                 <div class="inner_content clearfix">
                   <div class="product_image">
-                    <div class="mask1"><img src="/<%= product.imageURLs[3] %>" style="width: 220px; height: 293px;" alt="<%= product.imageURLs[3] %>" class="img-responsive zoom-img"></div>
+                    <div class="mask1">
+						<% if (product.offer ) { %>
+							<div class="discount-label">
+								<%= product.offer && product.offer.percentage %> % Off
+							</div>
+						 
+						<% } %>                      
+                      <img src="/<%= product.imageURLs[3] %>" style="width: 220px; height: 293px;" alt="<%= product.imageURLs[3] %>" class="img-responsive zoom-img">
+                    </div>
                     <!-- <div class="mask1" ><img src="<%= product.imageURLs[3] %>"  alt="image" class="img-responsive zoom-img"></div> -->
                     <div class="mask">
                       <div class="info">Quick View</div>
@@ -167,8 +175,18 @@
                         <%= product.description %>
                       </p>
                       <div class="price mount item_price">
-                        <%= product.price %>
-                      </div>
+						<% if (product.offer && product.offer.percentage) { %>
+							<% 
+							  // Calculate the discounted price
+							  const discountedPrice = product.price - (product.price * (product.offer.percentage / 100));
+							%>
+							<strong><%= discountedPrice.toFixed(2) %> </strong><!-- Display the discounted price with 2 decimal places -->
+							<del style="color: rgb(129, 127, 127);"><%= product.price.toFixed(2) %></del> <!-- Display the original price with rupee symbol as crossed-out text -->
+						  <% } else { %>
+							<strong><%= product.price.toFixed(2) %> </strong><!-- Display the original price with rupee symbol -->
+						  <% } %>
+						  
+					</div>
                       <% if (product.quantity<1) { %>
                       <a class="button item_add cbp-vm-icon cbp-vm-add" style="color: red;" href="#">Out of stock</a>
                       <% } else { %>

@@ -212,7 +212,7 @@ const loadProducts = async (req, res) => {
                 }
 
                 // Fetch paginated products and total count from MongoDB using the query
-                const products = await Products.find(query).skip(skip).limit(PAGE_SIZE).populate('category');
+                const products = await Products.find(query).skip(skip).limit(PAGE_SIZE).populate('category offer');
                 const totalCount = await Products.countDocuments(query);
                 const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
@@ -222,12 +222,12 @@ const loadProducts = async (req, res) => {
             }
         } else {
             const categories = await Category.find();
-            const products = await Products.find().populate('category');
+            const products = await Products.find().populate('category offer');
             res.render('user/products', { products, user: null, categories, cart: null, totalPages: null });
         }
     } else {
         const categories = await Category.find();
-        const products = await Products.find().populate('category');
+        const products = await Products.find().populate('category offer');
         res.render('user/products', { products, user: null, categories, cart: null, totalPages: null });
     }
 };
@@ -372,7 +372,12 @@ const loadCart = async (req, res) => {
         if (req.session.user_id) {
             const couponDiscount = req.session.discountAmount || 0;
             const userId = req.session.user_id;
-            const cart = await Cart.findOne({ userId }).populate('items.productId');
+            const cart = await Cart.findOne({ userId }).populate({
+                path: 'items.productId',
+                populate: {
+                    path: 'offer'
+                }
+            });
             const userData = await User.findById(req.session.user_id);
             const unusedCoupons = await couponModel.find({
                 usersUsed: { $not: { $elemMatch: { user_id: userId } } },
@@ -586,7 +591,12 @@ const loadCheckout = async (req, res) => {
             const discountAmount = req.session.discountAmount || 0;
             const userId = req.session.user_id;
             const userData = await User.findById(req.session.user_id);
-            const cart = await Cart.findOne({ userId }).populate('items.productId');
+            const cart = await Cart.findOne({ userId }).populate({
+                path: 'items.productId',
+                populate: {
+                    path: 'offer'
+                }
+            });
             res.render('user/checkout', { user: userData, cart: cart, addresses: userData.addresses, discountAmount })
         }
     } catch (error) {
@@ -710,10 +720,10 @@ const verifyPayment = async (req, res) => {
             delete req.session.discountAmount;
             await Cart.findOneAndDelete({ userId });
             console.log('cart items deleted');
-            res.json({status:true})
+            res.json({ status: true })
         }
     } catch (error) {
-        console.log('verify err ',error.message);
+        console.log('verify err ', error.message);
     }
 
 }
@@ -724,7 +734,16 @@ const loadOrderPlaced = async (req, res) => {
         const userId = req.session.user_id
         const userData = await User.findById(req.session.user_id);
         const cart = await Cart.findOne({ userId }).populate('items.productId');
-        const order = await orderModel.findById(orderId).populate('items.product', 'title');
+        // const order = await orderModel.findById(orderId).populate('items.product');
+        const order = await orderModel
+            .findById(orderId)
+            .populate({
+                path: 'items.product',
+                populate: {
+                    path: 'offer',
+                },
+            });
+
         res.render('user/order-placed', { user: userData, cart: cart, order: order })
     } catch (error) {
         console.log(error.message);

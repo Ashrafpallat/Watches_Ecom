@@ -1,11 +1,14 @@
 /* Add this to your CSS file or style tag */
 .logo a {
-  text-decoration: none; /* Remove underline */
-  color: inherit; /* Inherit the text color from the parent */
+  text-decoration: none;
+  /* Remove underline */
+  color: inherit;
+  /* Inherit the text color from the parent */
 }
 
 .logo a:hover {
-  text-decoration: none; /* Remove underline on hover */
+  text-decoration: none;
+  /* Remove underline on hover */
   /* color: inherit;  */
 }
 
@@ -15,25 +18,27 @@
   cursor: pointer;
   font-weight: 200;
   background: none;
-  
+
   color: #fff;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 
-.dropdown-menu.show{
+.dropdown-menu.show {
   background: #F9D9BE;
   border-radius: 0%;
 }
+
 .dropdown-toggle {
   text-decoration: none;
 }
-.dropdown-toggle.show{
+
+.dropdown-toggle.show {
   text-decoration: none;
 }
 
-ul.header_user_info a .dropdown-item{
+ul.header_user_info a .dropdown-item {
   color: black;
 }
 
@@ -45,14 +50,17 @@ body {
   position: relative;
   height: 100%;
 }
+
 .account-settings .user-profile {
   margin: 0 0 1rem 0;
   padding-bottom: 1rem;
   text-align: center;
 }
+
 .account-settings .user-profile .user-avatar {
   margin: 0 0 1rem 0;
 }
+
 .account-settings .user-profile .user-avatar img {
   width: 90px;
   height: 90px;
@@ -60,26 +68,32 @@ body {
   -moz-border-radius: 100px;
   border-radius: 100px;
 }
+
 .account-settings .user-profile h5.user-name {
   margin: 0 0 0.5rem 0;
 }
+
 .account-settings .user-profile h6.user-email {
   margin: 0;
   font-size: 0.8rem;
   font-weight: 400;
   color: #9fa8b9;
 }
+
 .account-settings .about {
   margin: 2rem 0 0 0;
   text-align: center;
 }
+
 .account-settings .about h5 {
   margin: 0 0 15px 0;
   color: #007ae1;
 }
+
 .account-settings .about p {
   font-size: 0.825rem;
 }
+
 .form-control {
   border: 1px solid #cfd1d8;
   -webkit-border-radius: 2px;
@@ -108,16 +122,36 @@ body {
 }
 
 .thank-you-heading {
-  color: #28a745; /* Green color, you can customize */
+  color: #28a745;
+  /* Green color, you can customize */
 }
 
 .shop-more-link {
   display: inline-block;
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #007bff; /* Blue color, you can customize */
+  background-color: #007bff;
+  /* Blue color, you can customize */
   color: #fff;
   text-decoration: none;
   border-radius: 5px;
 }
 
+.mask1 {
+
+  position: relative;
+  display: inline-block;
+}
+
+
+.discount-label {
+  position: absolute;
+  top: 10px;
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  z-index: 1;
+}

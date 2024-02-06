@@ -42,6 +42,10 @@ const productSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    offer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Offer',
+    },
 })
 
 module.exports = mongoose.model('Products', productSchema)
