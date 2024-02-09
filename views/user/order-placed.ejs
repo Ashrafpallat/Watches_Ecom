@@ -32,6 +32,9 @@
                     <% if (item.product.offer && item.product.offer.percentage) { %>
                     <% const discountedPrice = item.product.price - (item.product.price * (item.product.offer.percentage / 100)); %>
                     <td><%= discountedPrice %></td>
+                    <% } else if (item.product.category && item.product.category.offer ) { %>
+                    <% const discountedPrice = item.product.price - (item.product.price * (item.product.category.offer.percentage / 100)); %>
+                    <td><%= discountedPrice %></td>
                     <% } else { %>
                     <td><%= item.price %></td>
                     <% } %>

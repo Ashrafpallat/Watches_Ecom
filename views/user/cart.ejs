@@ -99,6 +99,10 @@
                         <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
                         <%= discountedPrice.toFixed(2) %>
                         <del style="color: rgb(129, 127, 127); font-weight: normal;">₹<%= item.productId.price.toFixed(2) %></del>
+                        <% } else if (item.productId.category && item.productId.category.offer ) { %>
+                        <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.category.offer.percentage / 100)); %>
+                        <%= discountedPrice.toFixed(2) %>
+                        <del style="color: rgb(129, 127, 127); font-weight: normal;">₹<%= item.productId.price.toFixed(2) %></del>
                         <% } else { %>
                         <%= item.productId.price.toFixed(2) %>
                         <% } %>
@@ -141,6 +145,9 @@
                 <% if (item.productId.offer && item.productId.offer.percentage) { %>
                 <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
                 <% totalPrice += discountedPrice * item.quantity; %>
+                <% } else if (item.productId.category && item.productId.category.offer ) { %>
+                <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.category.offer.percentage / 100)); %>
+                <% totalPrice += discountedPrice * item.quantity; %>
                 <% } else { %>
                 <% totalPrice += item.productId.price * item.quantity; %>
                 <% } %>
@@ -155,7 +162,7 @@
               </span>
 
               <span>Discount</span>
-              <span class="total1" >
+              <span class="total1">
                 <%= couponDiscount %>
                 <%=  %>
               </span>

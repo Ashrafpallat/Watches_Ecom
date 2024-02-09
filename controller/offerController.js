@@ -33,6 +33,7 @@ const addOffer = async (req, res) => {
             startingDate,
             expiryDate,
             percentage,
+            applyFor,
         });
         // Save the new offer
         const savedOffer = await newOffer.save();
@@ -65,41 +66,54 @@ const addOffer = async (req, res) => {
 //     }
 // }
 
+// const deleteOffer = async (req, res) => {
+//     try {
+//         const offerId = req.body.offerId;
+//         // Find the offer to get details
+//         const offer = await offerModel.findById(offerId);
+
+//         // If the offer is found, update associated products or categories
+//         if (offer) {
+//             // Check if the offer is associated with products
+//             if (offer.products && offer.products.length > 0) {
+//                 // Update each associated product
+//                 for (const productId of offer.products) {
+//                     const product = await Products.findById(productId);
+//                     if (product) {
+//                         // Remove the offer association from the product
+//                         product.offer = null;
+//                         await product.save();
+//                     }
+//                 }
+//             }
+
+//             // Check if the offer is associated with categories
+//             if (offer.categories && offer.categories.length > 0) {
+//                 // Update each associated category
+//                 for (const categoryId of offer.categories) {
+//                     const category = await Category.findById(categoryId);
+//                     if (category) {
+//                         // Remove the offer association from the category
+//                         category.offer = null;
+//                         await category.save();
+//                     }
+//                 }
+//             }
+//         }
+
+//         // Delete the offer
+//         await offerModel.findByIdAndDelete(offerId);
+
+//         res.json({ success: true });
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
 const deleteOffer = async (req, res) => {
     try {
         const offerId = req.body.offerId;
-
-        // Find the offer to get details
-        const offer = await offerModel.findById(offerId);
-
-        // If the offer is found, update associated products or categories
-        if (offer) {
-            // Check if the offer is associated with products
-            if (offer.products && offer.products.length > 0) {
-                // Update each associated product
-                for (const productId of offer.products) {
-                    const product = await Products.findById(productId);
-                    if (product) {
-                        // Remove the offer association from the product
-                        product.offer = null;
-                        await product.save();
-                    }
-                }
-            }
-
-            // Check if the offer is associated with categories
-            if (offer.categories && offer.categories.length > 0) {
-                // Update each associated category
-                for (const categoryId of offer.categories) {
-                    const category = await Category.findById(categoryId);
-                    if (category) {
-                        // Remove the offer association from the category
-                        category.offer = null;
-                        await category.save();
-                    }
-                }
-            }
-        }
 
         // Delete the offer
         await offerModel.findByIdAndDelete(offerId);
@@ -107,9 +121,9 @@ const deleteOffer = async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Internal Server Error');
     }
 };
+
 
 
 module.exports = {

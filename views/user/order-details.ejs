@@ -37,7 +37,15 @@
                       <p class="text-muted mb-0 small">Qty: <%= item.quantity %></p>
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <% if (item.product.offer && item.product.offer.percentage) { %>
+                      <% const discountedPrice = item.product.price - (item.product.price * (item.product.offer.percentage / 100)); %>
+                      <%= discountedPrice %>
+                      <% } else if (item.product.category && item.product.category.offer ) { %>
+                      <% const discountedPrice = item.product.price - (item.product.price * (item.product.category.offer.percentage / 100)); %>
+                      <%= discountedPrice %>
+                      <% } else { %>
                       <p class="text-muted mb-0 small">₹<%= item.product.price %></p>
+                      <% } %>
                     </div>
                   </div>
                   <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -199,7 +207,7 @@
     }
     async function returnOrder(event, orderId) {
       event.preventDefault();
-      console.log('ordrer id from script ',orderId);
+      console.log('ordrer id from script ', orderId);
       Swal.fire({
         title: "Are you sure?",
         text: "",
@@ -241,32 +249,34 @@
 
     }
     async function cancelReturn(event, orderId) {
-    event.preventDefault();
-    try {
-      const response = await $.ajax({
-        type: 'POST',
-        data: { orderId: orderId },
-        url: '/cancel-return',
-      });
-
-      if (response.success) {
-        Swal.fire({
-          title: "",
-          text: "Return canceled ",
-          icon: "success",
-          showConfirmButton: false, // Hide the "OK" button
+      event.preventDefault();
+      try {
+        const response = await $.ajax({
+          type: 'POST',
+          data: {
+            orderId: orderId
+          },
+          url: '/cancel-return',
         });
 
-        // Optionally, you can refresh the page
-        setTimeout(() => {
-          // Redirect to the /my-orders route after the delay
-          window.location.href = '/my-orders';
-        }, 2000);
+        if (response.success) {
+          Swal.fire({
+            title: "",
+            text: "Return canceled ",
+            icon: "success",
+            showConfirmButton: false, // Hide the "OK" button
+          });
+
+          // Optionally, you can refresh the page
+          setTimeout(() => {
+            // Redirect to the /my-orders route after the delay
+            window.location.href = '/my-orders';
+          }, 2000);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
-  }
   </script>
 
 

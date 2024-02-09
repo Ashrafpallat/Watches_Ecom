@@ -211,12 +211,12 @@
                 <a href="#" class="nav-link"><%= item.productId.title %></a>
                 <p style="font-size: small;">Qty: <%= item.quantity %></p>
                 <% if (item.productId.offer && item.productId.offer.percentage) { %>
-                 <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
+                <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
                 <div class="price text-muted">Price: <%= discountedPrice %></div>
                 <% } else { %>
                 <div class="price text-muted">Price: <%= item.price %></div>
                 <% } %>
-                
+
                 <input type="hidden" name="items" value="<%= item %>" id="">
               </div>
             </div>
@@ -226,12 +226,15 @@
             <% function calculateTotalPrice(items) { %>
             <% let totalPrice = 0; %>
             <% items.forEach(item => { %>
-              
+
             <% if (item.productId.offer && item.productId.offer.percentage) { %>
-              <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
+            <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.offer.percentage / 100)); %>
+            <% totalPrice += discountedPrice * item.quantity; %>
+            <% } else if (item.productId.category && item.productId.category.offer ) { %>
+            <% const discountedPrice = item.productId.price - (item.productId.price * (item.productId.category.offer.percentage / 100)); %>
             <% totalPrice += discountedPrice * item.quantity; %>
             <% } else { %>
-             <% totalPrice += item.productId.price * item.quantity; %>
+            <% totalPrice += item.productId.price * item.quantity; %>
             <% } %>
             <% }); %>
             <% totalPrice -= discountAmount %>

@@ -212,7 +212,14 @@ const loadProducts = async (req, res) => {
                 }
 
                 // Fetch paginated products and total count from MongoDB using the query
-                const products = await Products.find(query).skip(skip).limit(PAGE_SIZE).populate('category offer');
+                const products = await Products.find(query)
+                    .skip(skip)
+                    .limit(PAGE_SIZE)
+                    .populate({
+                        path: 'category',
+                        populate: { path: 'offer' } // Populate the 'offer' field of the 'category'
+                    })
+                    .populate('offer'); // Populate the 'offer' field directly in the 'products'
                 const totalCount = await Products.countDocuments(query);
                 const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
@@ -374,10 +381,19 @@ const loadCart = async (req, res) => {
             const userId = req.session.user_id;
             const cart = await Cart.findOne({ userId }).populate({
                 path: 'items.productId',
-                populate: {
-                    path: 'offer'
-                }
+                populate: [
+                    {
+                        path: 'category',
+                        populate: { path: 'offer' } // Populate the offer field within category
+                    },
+                    {
+                        path: 'offer' // Populate the offer field directly within productId
+                    }
+                ]
             });
+
+
+
             const userData = await User.findById(req.session.user_id);
             const unusedCoupons = await couponModel.find({
                 usersUsed: { $not: { $elemMatch: { user_id: userId } } },
@@ -454,15 +470,6 @@ const editProfile = async (req, res) => {
     }
 };
 
-
-const loadLogout = async (req, res) => {
-    try {
-        req.session.destroy()
-        res.redirect('/')
-    } catch (error) {
-        console.log("logout error", error.message)
-    }
-};
 
 const loadManageAddress = async (req, res) => {
     try {
@@ -593,9 +600,15 @@ const loadCheckout = async (req, res) => {
             const userData = await User.findById(req.session.user_id);
             const cart = await Cart.findOne({ userId }).populate({
                 path: 'items.productId',
-                populate: {
-                    path: 'offer'
-                }
+                populate: [
+                    {
+                        path: 'category',
+                        populate: { path: 'offer' } // Populate the offer field within category
+                    },
+                    {
+                        path: 'offer' // Populate the offer field directly within productId
+                    }
+                ]
             });
             res.render('user/checkout', { user: userData, cart: cart, addresses: userData.addresses, discountAmount })
         }
@@ -735,14 +748,27 @@ const loadOrderPlaced = async (req, res) => {
         const userData = await User.findById(req.session.user_id);
         const cart = await Cart.findOne({ userId }).populate('items.productId');
         // const order = await orderModel.findById(orderId).populate('items.product');
-        const order = await orderModel
-            .findById(orderId)
-            .populate({
-                path: 'items.product',
-                populate: {
-                    path: 'offer',
+        const order = await orderModel.findById(orderId).populate({
+            path: 'items.product',
+            populate: [
+                {
+                    path: 'category',
+                    populate: { path: 'offer' } // Populate the offer field within category
                 },
-            });
+                {
+                    path: 'offer' // Populate the offer field directly within productId
+                }
+            ]
+        });
+
+        // const order = await orderModel
+        //     .findById(orderId)
+        //     .populate({
+        //         path: 'items.product',
+        //         populate: {
+        //             path: 'offer',
+        //         },
+        //     });
 
         res.render('user/order-placed', { user: userData, cart: cart, order: order })
     } catch (error) {
@@ -757,7 +783,11 @@ const loadMyorders = async (req, res) => {
         const userData = await User.findById(req.session.user_id);
         const cart = await Cart.findOne({ userId }).populate('items.productId');
         // Fetch orders for the specific user and populate the 'user' and 'items.product' fields
-        const order = await orderModel.find({ user: userId }).populate('user').populate('items.product');
+        // const order = await orderModel.find({ user: userId }).populate('user').populate('items.product');
+        const order = await orderModel.find({ user: userId })
+            .sort({ createdAt: -1 }) // Sort by descending order of creation date
+            .populate('user')
+            .populate('items.product');
         res.render('user/my-orders', { user: userData, cart, order })
     } catch (error) {
         console.log(error.message);
@@ -777,8 +807,13 @@ const loadOrderDetails = async (req, res) => {
             .populate('user')
             .populate({
                 path: 'items.product',
-                populate: { path: 'category' } // Assuming 'category' is a field in the 'items.product' schema
+                populate: [
+                    { path: 'category', populate: { path: 'offer' } }, // Populate 'offer' field within 'category'
+                    { path: 'offer' } // Populating the 'offer' field within the 'items.product'
+                ]
             });
+
+
         res.render('user/order-details', { user: userData, cart, order })
     } catch (error) {
         console.log(error.message);
@@ -1000,6 +1035,15 @@ const resetPassword = async (req, res) => {
         console.log(error.message);
     }
 }
+
+const loadLogout = async (req, res) => {
+    try {
+        req.session.destroy()
+        res.redirect('/')
+    } catch (error) {
+        console.log("logout error", error.message)
+    }
+};
 
 module.exports = {
     loadRegister,
