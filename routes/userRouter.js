@@ -43,24 +43,24 @@ userRouter.route('/verifyOTP')
     .post(userController.verifyOTP)
 
 userRouter.get('/home', userController.loadHome)
-userRouter.get('/logout', userController.loadLogout)
 userRouter.get('/products', userController.loadProducts)
 //filter 
 userRouter.get('/product/filter', filter)
 
 // Product detailes view
 userRouter.get('/productsDetails/:productId', userController.loadProductDetails);
-
+// Cart managment
 userRouter.get('/cart', auth.isUserLogin, userController.loadCart)
 userRouter.get('/add-to-cart/:productId', addtoCart)
 userRouter.post('/add-to-cart/:productId', addtoCart)
+userRouter.post("/change-product-quantity", changeProductQuantity)
 userRouter.get('/delete-from-cart/:productId', deleteFromCart)
 //  wishlist
 userRouter.get('/wishlist', userController.loadWishlist)
 userRouter.post('/wishlist/add/:productId', addToWishlist);
 userRouter.get('/delete-from-wishlist/:wishlistItemId', deleteFromWishlist)
-// change product quantity
-userRouter.post("/change-product-quantity", changeProductQuantity)
+// Coupon management
+userRouter.post('/apply-coupon', applyCoupon)
 
 // User profile
 userRouter.get('/myprofile', auth.isUserLogin, userController.loadMyProfile)
@@ -76,33 +76,30 @@ userRouter.get('/delete-address/:addressId', userController.deleteAdress);
 userRouter.route('/edit-address/:addressId')
     .get(auth.isUserLogin, userController.loadeditAddress)
     .post(userController.editAddress)
-
 // Order management
 userRouter.route('/checkout')
     .get(auth.isUserLogin, userController.loadCheckout)
     .post(userController.addAddressFromCheckout)
 userRouter.post('/place-order', userController.placeOrder)
 userRouter.post('/verifyPayment',userController.verifyPayment)
-
 userRouter.get('/order-placed', auth.isUserLogin, userController.loadOrderPlaced)
 userRouter.get('/my-orders', auth.isUserLogin, userController.loadMyorders)
 userRouter.get('/order-details/:id', auth.isUserLogin, userController.loadOrderDetails)
 userRouter.post('/cancel-order', userController.cancelOrder)
 userRouter.post('/return-order', userController.sendReturnRequest)
 userRouter.post('/cancel-return', userController.cancelReturnRequest)
-
+// Forgot password
 userRouter.post('/forgot-password', userController.sendOTP)
 userRouter.route('/verifyOTP2')
     .get(auth.isUserLogout, userController.loadVerifyOTP2)
     .post(userController.verifyOTP2)
-
 userRouter.route('/reset-password')
     .get(userController.loadResetPassword)
     .post(userController.resetPassword)
+// Invoice 
+userRouter.get('/generateInvoice/:orderId',auth.isUserLogin, userController.generateInvoicePDF)
 
 
-userRouter.post('/apply-coupon', applyCoupon)
-
-
+userRouter.get('/logout', userController.loadLogout)
 
 module.exports = userRouter; 

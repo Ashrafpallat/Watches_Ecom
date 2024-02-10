@@ -10,6 +10,8 @@ const orderModel = require('../model/order-model');
 
 const dotenv = require('dotenv');
 require('dotenv').config();
+const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 const nodemailer = require('nodemailer');
 const Razorpay = require('razorpay');
@@ -1036,6 +1038,135 @@ const resetPassword = async (req, res) => {
     }
 }
 
+
+// Controller function to generate the invoice PDF
+const generateInvoicePDF = async (req, res) => {
+    try {
+        const orderId = req.params.orderId
+        const userId = req.session.user_id
+        const userData = await User.findById(req.session.user_id);
+        const cart = await Cart.findOne({ userId }).populate('items.productId');
+        const order = await orderModel
+            .findById(orderId)
+            .populate('user')
+            .populate({
+                path: 'items.product',
+                populate: [
+                    { path: 'category', populate: { path: 'offer' } }, // Populate 'offer' field within 'category'
+                    { path: 'offer' } // Populating the 'offer' field within the 'items.product'
+                ]
+            });
+        const address = order.selectedAddress
+        const orderedItems = order.items
+        const totalPrice = order.totalAmount
+
+        // Generate the PDF buffer
+        const pdfBuffer = await generatePDFBuffer(orderId, orderedItems, totalPrice , address, userData);
+
+        // Set the appropriate headers for file download
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+
+        // Send the PDF buffer as the response
+        res.send(pdfBuffer);
+    } catch (error) {
+        console.error('An error occurred while generating the invoice:', error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+// Function to generate the PDF buffer
+const generatePDFBuffer = async (orderId, orderedItems, totalPrice, address, userData) => {
+    // Create a Puppeteer browser instance
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Construct HTML content for the invoice
+    const htmlContent = `
+    <html>
+<head>
+    <title>Invoice</title>
+    <!-- CSS styles -->
+    <style>
+        /* CSS styles for the invoice */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Styles for invoice header */
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .brand-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-header">
+        <div class="brand-name">Watches</div>
+        <h1>Invoice</h1>
+    </div>
+    <p>Order ID: ${orderId}</p>
+    <p>Name: ${userData.fname}</p>
+    <p>Address: ${address}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${(() => {
+        let rows = '';
+        orderedItems.forEach(item => {
+            rows += `
+                    <tr>
+                        <td>${item.product.title}</td>
+                        <td>₹${item.product.price.toFixed(2)}</td>
+                    </tr>
+                `;
+        });
+        return rows;
+    })()}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="1">Total Price</td>
+                <td>₹${totalPrice.toFixed(2)}</td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
+
+        `;
+
+    // Set the HTML content of the page
+    await page.setContent(htmlContent);
+
+    // Generate PDF
+    const pdfBuffer = await page.pdf({ format: 'A4' });
+
+    // Close the browser
+    await browser.close();
+
+    return pdfBuffer;
+};
+
+
+
 const loadLogout = async (req, res) => {
     try {
         req.session.destroy()
@@ -1082,5 +1213,7 @@ module.exports = {
     loadResetPassword,
     resetPassword,
     verifyPayment,
+    generateInvoicePDF,
+
 
 }
