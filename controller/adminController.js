@@ -22,7 +22,7 @@ const verifyLogin = async (req, res) => {
         const adminData = await User.findOne({ fname: req.body.fname })
         if (adminData) {
             const passwordMatch = await bcrypt.compare(req.body.password, adminData.password)
-            
+
             if (passwordMatch && adminData.role == 'admin') {
                 req.session.admin_id = adminData._id;
                 res.redirect('/admin/dashboard');
@@ -42,12 +42,45 @@ const verifyLogin = async (req, res) => {
 
 const loadDashboard = async (req, res) => {
     try {
-
         const adminData = await User.findById({ _id: req.session.admin_id });
-        res.render('admin/dashboard', { user: adminData });
+        const totalProducts = await Products.countDocuments()
+        const allOrders = await orderModel.find();
+        const totalOrders = await orderModel.countDocuments()
+        const totalUsers = await User.countDocuments()
+        const totalRevenue = allOrders.reduce((total, order) => total + order.totalAmount, 0);
+        const orders = await orderModel.find({}, 'createdAt');
 
+        // Group orders by year and count the number of orders for each year
+        const yearlyOrders = orders.reduce((accumulator, order) => {
+            const year = order.createdAt.getFullYear().toString();
+            accumulator[year] = (accumulator[year] || 0) + 1;
+            return accumulator;
+        }, {});
+
+        // Extract years and order counts for the specified years
+        const years = ["2024", "2025", "2026", "2027"];
+        const orderCounts = years.map(year => yearlyOrders[year] || 0);
+        const totalNonDeliveredOrdersResult = await orderModel.aggregate([
+            {
+                $match: {
+                    status: { $ne: 'delivered' } // Filter out documents with status 'delivered'
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalNonDeliveredOrders: { $sum: 1 } // Count the remaining documents
+                }
+            }
+        ]);
+        if (totalNonDeliveredOrdersResult.length > 0) {
+            // Extract the totalNonDeliveredOrders value from the first element of the array
+            var totalNonDeliveredOrders = totalNonDeliveredOrdersResult[0].totalNonDeliveredOrders;
+        } else {
+            console.log('No non-delivered orders found.');
+        }
+        res.render('admin/dashboard', { user: adminData, totalRevenue, totalNonDeliveredOrders, totalOrders, totalUsers,totalProducts,orderCounts });
     } catch (error) {
-
         console.log(error.message);
     }
 };
@@ -139,10 +172,10 @@ const blockUser = async (req, res) => {
     // const userId = req.params.userId;
 
     try {
-        console.log('userid ', req.body.userId); 
-        const userId= req.body.userId
+        console.log('userid ', req.body.userId);
+        const userId = req.body.userId
         await User.findByIdAndUpdate(userId, { status: 'Inactive' });
-        res.json({success:true})
+        res.json({ success: true })
         // res.redirect('/allusers');
     } catch (error) {
         console.error(error.message);
@@ -154,9 +187,9 @@ const unblockUser = async (req, res) => {
     // const userId = req.params.userId;
 
     try {
-        const userId= req.body.userId
+        const userId = req.body.userId
         await User.findByIdAndUpdate(userId, { status: 'Active' });
-        res.json({success:true})
+        res.json({ success: true })
         // res.redirect('/allusers');
     } catch (error) {
         console.error(error.message);
@@ -164,7 +197,7 @@ const unblockUser = async (req, res) => {
     }
 };
 
-const loadCoupons = async(req, res)=>{
+const loadCoupons = async (req, res) => {
     try {
         const coupon = await Coupon.find();
         const adminData = await User.findById({ _id: req.session.admin_id });

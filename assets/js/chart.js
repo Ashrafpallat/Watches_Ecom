@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
   /* ChartJS
    * -------
    * Data and config for chartjs
@@ -32,32 +32,32 @@ $(function() {
   var multiLineData = {
     labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
     datasets: [{
-        label: 'Dataset 1',
-        data: [12, 19, 3, 5, 2, 3],
-        borderColor: [
-          '#587ce4'
-        ],
-        borderWidth: 2,
-        fill: false
-      },
-      {
-        label: 'Dataset 2',
-        data: [5, 23, 7, 12, 42, 23],
-        borderColor: [
-          '#ede190'
-        ],
-        borderWidth: 2,
-        fill: false
-      },
-      {
-        label: 'Dataset 3',
-        data: [15, 10, 21, 32, 12, 33],
-        borderColor: [
-          '#f44252'
-        ],
-        borderWidth: 2,
-        fill: false
-      }
+      label: 'Dataset 1',
+      data: [12, 19, 3, 5, 2, 3],
+      borderColor: [
+        '#587ce4'
+      ],
+      borderWidth: 2,
+      fill: false
+    },
+    {
+      label: 'Dataset 2',
+      data: [5, 23, 7, 12, 42, 23],
+      borderColor: [
+        '#ede190'
+      ],
+      borderWidth: 2,
+      fill: false
+    },
+    {
+      label: 'Dataset 3',
+      data: [15, 10, 21, 32, 12, 33],
+      borderColor: [
+        '#f44252'
+      ],
+      borderWidth: 2,
+      fill: false
+    }
     ]
   };
   var options = {
@@ -113,31 +113,137 @@ $(function() {
       animateRotate: true
     }
   };
-  var areaData = {
-    labels: ["2013", "2014", "2015", "2016", "2017"],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderWidth: 1,
-      fill: true, // 3: no fill
-    }]
-  };
+  // var areaData = {
+  //   labels: ["2013", "2014", "2015", "2016", "2017"],
+  //   datasets: [{
+  //     label: '# of Votes',
+  //     data: [12, 19, 3, 5, 2, 3],
+  //     backgroundColor: [
+  //       'rgba(255, 99, 132, 0.2)',
+  //       'rgba(54, 162, 235, 0.2)',
+  //       'rgba(255, 206, 86, 0.2)',
+  //       'rgba(75, 192, 192, 0.2)',
+  //       'rgba(153, 102, 255, 0.2)',
+  //       'rgba(255, 159, 64, 0.2)'
+  //     ],
+  //     borderColor: [
+  //       'rgba(255,99,132,1)',
+  //       'rgba(54, 162, 235, 1)',
+  //       'rgba(255, 206, 86, 1)',
+  //       'rgba(75, 192, 192, 1)',
+  //       'rgba(153, 102, 255, 1)',
+  //       'rgba(255, 159, 64, 1)'
+  //     ],
+  //     borderWidth: 1,
+  //     fill: true, // 3: no fill
+  //   }]
+  // };
+
+
+
+
+
+  $(function () {
+    // Define monthly and yearly data
+    var monthlyData = {
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      datasets: [{
+        label: 'Sales',
+        data: [10, 15, 8, 12, 7, 9, 14, 11, 13, 16, 10, 18],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1,
+        fill: true
+      },
+      {
+        label: 'Users', // Label for the additional option
+        data: [8, 15, 7, 10, 5, 12], // Data for the additional option
+        backgroundColor: [
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)'
+        ],
+        borderWidth: 1,
+        fill: true // Fill for the additional option
+      }]
+    };
+    
+    var yearlyData = {
+      labels: ["2024", "2025", "2026", "2027"],
+      datasets: [{
+        label: 'Sales',
+        data: orderCounts,
+        // data: [ 24, 0, 0, 0 ],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1,
+        fill: true
+      },
+      {
+        label: 'Users', // Label for the additional option
+        // data: [8, 15, 7, 10, 5, 12], // Data for the additional option
+        backgroundColor: [
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)'
+        ],
+        borderWidth: 1,
+        fill: true // Fill for the additional option
+      }]
+    };
+
+    // Create area chart
+    var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+    var areaChart = new Chart(areaChartCanvas, {
+      type: 'line',
+      data: yearlyData, // Initially display yearly data
+      options: {
+        plugins: {
+          filler: {
+            propagate: true
+          }
+        }
+      }
+    });
+
+    // Update the chart with monthly data
+    function updateMonthlyGraph() {
+      areaChart.data = monthlyData;
+      areaChart.update();
+    }
+
+    // Update the chart with yearly data
+    function updateYearlyGraph() {
+      areaChart.data = yearlyData;
+      areaChart.update();
+    }
+
+    // Button click event listeners to update the graph
+    $('#monthlyButton').click(updateMonthlyGraph);
+    $('#yearlyButton').click(updateYearlyGraph);
+  });
 
   var areaOptions = {
     plugins: {
@@ -150,29 +256,29 @@ $(function() {
   var multiAreaData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [{
-        label: 'Facebook',
-        data: [8, 11, 13, 15, 12, 13, 16, 15, 13, 19, 11, 14],
-        borderColor: ['rgba(255, 99, 132, 0.5)'],
-        backgroundColor: ['rgba(255, 99, 132, 0.5)'],
-        borderWidth: 1,
-        fill: true
-      },
-      {
-        label: 'Twitter',
-        data: [7, 17, 12, 16, 14, 18, 16, 12, 15, 11, 13, 9],
-        borderColor: ['rgba(54, 162, 235, 0.5)'],
-        backgroundColor: ['rgba(54, 162, 235, 0.5)'],
-        borderWidth: 1,
-        fill: true
-      },
-      {
-        label: 'Linkedin',
-        data: [6, 14, 16, 20, 12, 18, 15, 12, 17, 19, 15, 11],
-        borderColor: ['rgba(255, 206, 86, 0.5)'],
-        backgroundColor: ['rgba(255, 206, 86, 0.5)'],
-        borderWidth: 1,
-        fill: true
-      }
+      label: 'Facebook',
+      data: [8, 11, 13, 15, 12, 13, 16, 15, 13, 19, 11, 14],
+      borderColor: ['rgba(255, 99, 132, 0.5)'],
+      backgroundColor: ['rgba(255, 99, 132, 0.5)'],
+      borderWidth: 1,
+      fill: true
+    },
+    {
+      label: 'Twitter',
+      data: [7, 17, 12, 16, 14, 18, 16, 12, 15, 11, 13, 9],
+      borderColor: ['rgba(54, 162, 235, 0.5)'],
+      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+      borderWidth: 1,
+      fill: true
+    },
+    {
+      label: 'Linkedin',
+      data: [6, 14, 16, 20, 12, 18, 15, 12, 17, 19, 15, 11],
+      borderColor: ['rgba(255, 206, 86, 0.5)'],
+      backgroundColor: ['rgba(255, 206, 86, 0.5)'],
+      borderWidth: 1,
+      fill: true
+    }
     ]
   };
 
@@ -203,59 +309,59 @@ $(function() {
 
   var scatterChartData = {
     datasets: [{
-        label: 'First Dataset',
-        data: [{
-            x: -10,
-            y: 0
-          },
-          {
-            x: 0,
-            y: 3
-          },
-          {
-            x: -25,
-            y: 5
-          },
-          {
-            x: 40,
-            y: 5
-          }
-        ],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255,99,132,1)'
-        ],
-        borderWidth: 1
+      label: 'First Dataset',
+      data: [{
+        x: -10,
+        y: 0
       },
       {
-        label: 'Second Dataset',
-        data: [{
-            x: 10,
-            y: 5
-          },
-          {
-            x: 20,
-            y: -30
-          },
-          {
-            x: -25,
-            y: 15
-          },
-          {
-            x: -10,
-            y: 5
-          }
-        ],
-        backgroundColor: [
-          'rgba(54, 162, 235, 0.2)',
-        ],
-        borderColor: [
-          'rgba(54, 162, 235, 1)',
-        ],
-        borderWidth: 1
+        x: 0,
+        y: 3
+      },
+      {
+        x: -25,
+        y: 5
+      },
+      {
+        x: 40,
+        y: 5
       }
+      ],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)'
+      ],
+      borderWidth: 1
+    },
+    {
+      label: 'Second Dataset',
+      data: [{
+        x: 10,
+        y: 5
+      },
+      {
+        x: 20,
+        y: -30
+      },
+      {
+        x: -25,
+        y: 15
+      },
+      {
+        x: -10,
+        y: 5
+      }
+      ],
+      backgroundColor: [
+        'rgba(54, 162, 235, 0.2)',
+      ],
+      borderColor: [
+        'rgba(54, 162, 235, 1)',
+      ],
+      borderWidth: 1
+    }
     ]
   }
 

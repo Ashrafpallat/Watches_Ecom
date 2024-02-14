@@ -1141,15 +1141,12 @@ const generatePDFBuffer = async (orderId, orderedItems, totalPrice, address, use
         return rows;
     })()}
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="1">Total Price</td>
-                <td>₹${totalPrice.toFixed(2)}</td>
-            </tr>
-        </tfoot>
     </table>
+    <!-- Total Price outside the table -->
+    <p>Total Price: ₹${totalPrice.toFixed(2)}</p>
 </body>
 </html>
+
 
         `;
 
