@@ -42,6 +42,7 @@ const verifyLogin = async (req, res) => {
 
 const loadDashboard = async (req, res) => {
     try {
+        const allUsers = await User.find()
         const adminData = await User.findById({ _id: req.session.admin_id });
         const totalProducts = await Products.countDocuments()
         const allOrders = await orderModel.find();
@@ -124,7 +125,7 @@ const loadDashboard = async (req, res) => {
         }
         res.render('admin/dashboard', {
             user: adminData, totalRevenue, totalNonDeliveredOrders, totalOrders, totalUsers, totalProducts, orderCounts, userCounts,
-            orderCountsByMonth, userCountsByMonth
+            orderCountsByMonth, userCountsByMonth, allUsers,
         });
     } catch (error) {
         console.log(error.message);
