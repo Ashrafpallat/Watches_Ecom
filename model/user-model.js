@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
         pincode: Number,
         address: String,
     }],
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
 
 })
 

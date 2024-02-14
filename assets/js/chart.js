@@ -149,15 +149,17 @@ $(function () {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       datasets: [{
         label: 'Sales',
-        data: [10, 15, 8, 12, 7, 9, 14, 11, 13, 16, 10, 18],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255,99,132,1)',
+        // data: [10, 15, 8, 12, 7, 9, 14, 11, 13, 16, 10, 18],
+        data: orderCountsByMonth,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Green background color with opacity
+        borderColor: 'rgba(75, 192, 192, 1)', // Solid green border color
         borderWidth: 1,
         fill: true
       },
       {
         label: 'Users', // Label for the additional option
-        data: [8, 15, 7, 10, 5, 12], // Data for the additional option
+        // data: [8, 15, 7, 10, 5, 12], 
+        data: userCountsByMonth,
         backgroundColor: [
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -178,21 +180,22 @@ $(function () {
         fill: true // Fill for the additional option
       }]
     };
-    
+
     var yearlyData = {
       labels: ["2024", "2025", "2026", "2027"],
       datasets: [{
         label: 'Sales',
         data: orderCounts,
         // data: [ 24, 0, 0, 0 ],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255,99,132,1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Green background color with opacity
+        borderColor: 'rgba(75, 192, 192, 1)', // Solid green border color
         borderWidth: 1,
         fill: true
       },
       {
         label: 'Users', // Label for the additional option
         // data: [8, 15, 7, 10, 5, 12], // Data for the additional option
+        data: userCounts,
         backgroundColor: [
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',

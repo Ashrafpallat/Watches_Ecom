@@ -49,6 +49,7 @@ const loadDashboard = async (req, res) => {
         const totalUsers = await User.countDocuments()
         const totalRevenue = allOrders.reduce((total, order) => total + order.totalAmount, 0);
         const orders = await orderModel.find({}, 'createdAt');
+        const users = await User.find({}, 'createdAt')
 
         // Group orders by year and count the number of orders for each year
         const yearlyOrders = orders.reduce((accumulator, order) => {
@@ -60,6 +61,48 @@ const loadDashboard = async (req, res) => {
         // Extract years and order counts for the specified years
         const years = ["2024", "2025", "2026", "2027"];
         const orderCounts = years.map(year => yearlyOrders[year] || 0);
+
+        // Group users by year and count the number of users for each year
+        const yearlyUsers = users.reduce((accumulator, user) => {
+            const year = user.createdAt.getFullYear().toString();
+            accumulator[year] = (accumulator[year] || 0) + 1;
+            return accumulator;
+        }, {});
+
+        // Extract years and user counts for the specified years
+        const userCounts = years.map(year => yearlyUsers[year] || 0);
+
+        // Monthly data
+
+        const currentYear = new Date().getFullYear();
+        // Filter orders for the current year
+        const usersThisYear = users.filter(user => user.createdAt.getFullYear() === currentYear);
+
+        // Group orders by month and count the number of orders for each month
+        const usersByMonth = usersThisYear.reduce((accumulator, user) => {
+            const month = user.createdAt.getMonth(); // Get the month index (0-11)
+            accumulator[month] = (accumulator[month] || 0) + 1;
+            return accumulator;
+        }, {});
+        const monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        // Map order counts by month to corresponding labels
+        const userCountsByMonth = monthLabels.map((label, index) => usersByMonth[index] || 0);
+        console.log('user count this mount ',userCountsByMonth);
+
+        // Monthly orders
+        // Filter orders for the current year
+        const ordersThisYear = orders.filter(order => order.createdAt.getFullYear() === currentYear);
+
+        // Group orders by month and count the number of orders for each month
+        const ordersByMonth = ordersThisYear.reduce((accumulator, order) => {
+            const month = order.createdAt.getMonth(); // Get the month index (0-11)
+            accumulator[month] = (accumulator[month] || 0) + 1;
+            return accumulator;
+        }, {});
+        // Map order counts by month to corresponding labels
+        const orderCountsByMonth = monthLabels.map((label, index) => ordersByMonth[index] || 0);
+
+
         const totalNonDeliveredOrdersResult = await orderModel.aggregate([
             {
                 $match: {
@@ -79,7 +122,10 @@ const loadDashboard = async (req, res) => {
         } else {
             console.log('No non-delivered orders found.');
         }
-        res.render('admin/dashboard', { user: adminData, totalRevenue, totalNonDeliveredOrders, totalOrders, totalUsers,totalProducts,orderCounts });
+        res.render('admin/dashboard', {
+            user: adminData, totalRevenue, totalNonDeliveredOrders, totalOrders, totalUsers, totalProducts, orderCounts, userCounts,
+            orderCountsByMonth, userCountsByMonth
+        });
     } catch (error) {
         console.log(error.message);
     }

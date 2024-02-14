@@ -83,11 +83,10 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">Perfomance</h4>
-                          <button id="monthlyButton" class="btn btn-sm btn-success text-white">Monthly</button>
-                          <button id="yearlyButton" class="btn btn-sm btn-success text-white">Yearly</button>
+                          <h4 class="card-title" style="float: left; font-size: larger;">Perfomance Statistics</h4>
+                          <button id="monthlyButton" class="btn btn-sm btn-primary text-white" style="float: right;">Monthly</button>
+                          <button id="yearlyButton" class="btn btn-sm btn-primary text-white" style="float: right;">Yearly</button>
                           <canvas id="areaChart"></canvas>
-
                         </div>
                       </div>
                     </div>
@@ -156,7 +155,9 @@
   <script>
     // Pass orderCounts array to the JavaScript file
     const orderCounts = JSON.parse('<%- JSON.stringify(orderCounts) %>').map(Number);
-
+    const userCounts = JSON.parse('<%- JSON.stringify(userCounts) %>').map(Number);
+    const orderCountsByMonth = JSON.parse('<%- JSON.stringify(orderCountsByMonth) %>').map(Number);
+    const userCountsByMonth = JSON.parse('<%- JSON.stringify(userCountsByMonth) %>').map(Number);
   </script>
 
   <!-- plugins:js -->
