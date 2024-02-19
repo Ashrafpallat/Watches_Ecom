@@ -77,7 +77,8 @@ adminRouter.route('/add-offer')
 // adminRouter.post('/list-offer', offerController.listOffer)
 // adminRouter.post('/unlist-offer', offerController.unlistOffer)
 adminRouter.post('/delete-offer', offerController.deleteOffer)
-
+// Sales report
+adminRouter.get('/sales-report', adminController.loadSalesReport)
 
 adminRouter.get('/adminlogout', auth.isAdminLogout, adminController.loadLogout)
 module.exports = adminRouter;

@@ -18,6 +18,10 @@
                     <div class="col-sm-12">
                       <div class="statistics-details d-flex align-items-center justify-content-between">
                         <div>
+                          <a type="button" class="btn btn-primary text-white" href="/admin/sales-report">
+                            <i class="ti-file btn-icon-prepend"></i>
+                            Sales Report
+                          </a>
                           <p class="statistics-title">Total Revenue</p>
                           <h3 class="rate-percentage">₹<%= totalRevenue %></h3>
                           <!-- <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p> -->
@@ -105,7 +109,7 @@
                             <table class="table select-table">
                               <thead>
                                 <tr>
-                                  <th>Customer</th>
+                                  <th>User</th>
                                   <th>Email</th>
                                   <th>Phone</th>
                                   <th>Status</th>
@@ -116,7 +120,7 @@
                                 <tr>
                                   <td>
                                     <div class="d-flex ">
-                                      <img src="images/faces/face1.jpg" alt="">
+                                      <img src="/images/faces/face8.jpg" alt="">
                                       <div>
                                         <h6><%= user.fname %></h6>
                                         <p> <%= user.role %></p>
@@ -134,7 +138,7 @@
                                     <% if (user.status === 'Active') { %>
                                     <div class="badge badge-opacity-success">Active</div>
                                     <% } else { %>
-                                    <div class="badge badge-opacity-danger">Incactive</div>
+                                    <div class="badge badge-opacity-danger" style="background: rgb(255, 212, 212);">Incactive</div>
                                     <% } %>
                                   </td>
                                 </tr>
@@ -147,12 +151,12 @@
                       </div>
                     </div>
                     <div class="col-4 grid-margin stretch-card">
-                      <div class="card">
+                      <!-- <div class="card">
                         <div class="card-body">
                           <h4 class="card-title">Pie chart</h4>
                           <canvas id="pieChart"></canvas>
                         </div>
-                      </div>
+                      </div> -->
                       </div>
                   </div>
 
@@ -177,6 +181,10 @@
     const userCounts = JSON.parse('<%- JSON.stringify(userCounts) %>').map(Number);
     const orderCountsByMonth = JSON.parse('<%- JSON.stringify(orderCountsByMonth) %>').map(Number);
     const userCountsByMonth = JSON.parse('<%- JSON.stringify(userCountsByMonth) %>').map(Number);
+    // for pie chart
+    const totalOrders = JSON.parse('<%- JSON.stringify(totalOrders) %>').map(Number);
+    const totalNonDeliveredOrders = JSON.parse('<%- JSON.stringify(totalNonDeliveredOrders) %>').map(Number);
+    const totalProducts = JSON.parse('<%- JSON.stringify(totalProducts) %>').map(Number);
   </script>
 
   <!-- plugins:js -->

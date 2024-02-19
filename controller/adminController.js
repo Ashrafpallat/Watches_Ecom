@@ -88,7 +88,6 @@ const loadDashboard = async (req, res) => {
         const monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         // Map order counts by month to corresponding labels
         const userCountsByMonth = monthLabels.map((label, index) => usersByMonth[index] || 0);
-        console.log('user count this mount ',userCountsByMonth);
 
         // Monthly orders
         // Filter orders for the current year
@@ -123,6 +122,7 @@ const loadDashboard = async (req, res) => {
         } else {
             console.log('No non-delivered orders found.');
         }
+        console.log('by month ', orderCountsByMonth);        
         res.render('admin/dashboard', {
             user: adminData, totalRevenue, totalNonDeliveredOrders, totalOrders, totalUsers, totalProducts, orderCounts, userCounts,
             orderCountsByMonth, userCountsByMonth, allUsers,
@@ -132,14 +132,16 @@ const loadDashboard = async (req, res) => {
     }
 };
 
-const loadLogout = async (req, res) => {
+
+const loadSalesReport = async(req,res)=>{
     try {
-        req.session.destroy()
-        res.redirect('/admin')
+        const adminData = await User.findById({ _id: req.session.admin_id });
+        res.render('admin/sales-report',{ user:adminData})
     } catch (error) {
-        console.log("logout error", error.message)
+       console.log(error.message); 
     }
-};
+}
+
 
 const loadProducts = async (req, res) => {
     try {
@@ -254,6 +256,15 @@ const loadCoupons = async (req, res) => {
     }
 }
 
+const loadLogout = async (req, res) => {
+    try {
+        req.session.destroy()
+        res.redirect('/admin')
+    } catch (error) {
+        console.log("logout error", error.message)
+    }
+};
+
 module.exports = {
     loadlogin,
     verifyLogin,
@@ -267,5 +278,6 @@ module.exports = {
     blockUser,
     unblockUser,
     loadCoupons,
+    loadSalesReport
 }
 

@@ -5,7 +5,7 @@ $(function () {
    */
   'use strict';
   var data = {
-    labels: [ "2024", "2025", "2026", "2027"],
+    labels: ["2024", "2025", "2026", "2027"],
     datasets: [{
       label: 'Sales',
       // data: [10, 19, 3, 5, 2, 3],
@@ -81,7 +81,7 @@ $(function () {
   };
   var doughnutPieData = {
     datasets: [{
-      data: [30, 40, 30],
+      data: [10, 40, 30],
       backgroundColor: [
         'rgba(255, 99, 132, 0.5)',
         'rgba(54, 162, 235, 0.5)',
