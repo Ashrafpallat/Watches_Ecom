@@ -122,7 +122,7 @@ const loadDashboard = async (req, res) => {
         } else {
             console.log('No non-delivered orders found.');
         }
-        console.log('by month ', orderCountsByMonth);        
+        console.log('by month ', orderCountsByMonth);
         res.render('admin/dashboard', {
             user: adminData, totalRevenue, totalNonDeliveredOrders, totalOrders, totalUsers, totalProducts, orderCounts, userCounts,
             orderCountsByMonth, userCountsByMonth, allUsers,
@@ -133,12 +133,54 @@ const loadDashboard = async (req, res) => {
 };
 
 
-const loadSalesReport = async(req,res)=>{
+const loadSalesReport = async (req, res) => {
     try {
         const adminData = await User.findById({ _id: req.session.admin_id });
-        res.render('admin/sales-report',{ user:adminData})
+        const orders = await orderModel.find({ status: 'Delivered' })
+            .sort({ createdAt: -1 }) // Sort by descending order of creation date
+            .populate('user')
+            .populate('items.product');
+        let totalAmount = 0;
+
+        // Iterate through each order
+        for (const order of orders) {
+            // Calculate the total amount for each order
+            let orderTotal = 0;
+            for (const item of order.items) {
+                orderTotal += item.quantity * item.product.price; // Assuming each item has a 'quantity' and 'product' field with 'price'
+            }
+            totalAmount += orderTotal;
+        }
+
+        res.render('admin/sales-report', { user: adminData, orders, totalAmount })
     } catch (error) {
-       console.log(error.message); 
+        console.log(error.message);
+    }
+}
+
+const generateSalesReport = async (req, res) => {
+    try {
+        console.log(req.body);
+        const startDate = new Date(req.body.startDate);
+        const endDate = new Date(req.body.endDate);
+        const orders = await orderModel.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+                    status: "Delivered" // Assuming "Delivered" is the status for delivered orders
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalAmount: { $sum: "$totalamount" }
+                }
+            }
+        ]);
+        const totalDeliveredAmount = orders.length > 0 ? orders[0].totalAmount : 0;
+        res.render('admin/sales-report', { user: adminData, orders, totalDeliveredAmount })
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
@@ -278,6 +320,8 @@ module.exports = {
     blockUser,
     unblockUser,
     loadCoupons,
-    loadSalesReport
+    loadSalesReport,
+    generateSalesReport,
+
 }
 

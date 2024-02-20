@@ -72,13 +72,14 @@ adminRouter.get('/accept-return/:orderId', orderController.acceptRetrun)
 // Offer management
 adminRouter.get('/offers', auth.isAdminLogin, offerController.loadOffers)
 adminRouter.route('/add-offer')
-  .get(auth.isAdminLogin, offerController.loadAddOffer)
+  .get(auth.isAdminLogin,auth.isAdminLogin, offerController.loadAddOffer)
   .post(offerController.addOffer)
 // adminRouter.post('/list-offer', offerController.listOffer)
 // adminRouter.post('/unlist-offer', offerController.unlistOffer)
 adminRouter.post('/delete-offer', offerController.deleteOffer)
 // Sales report
-adminRouter.get('/sales-report', adminController.loadSalesReport)
+adminRouter.get('/sales-report',auth.isAdminLogin, adminController.loadSalesReport)
+adminRouter.post('/generate-sales-report', adminController.generateSalesReport)
 
 adminRouter.get('/adminlogout', auth.isAdminLogout, adminController.loadLogout)
 module.exports = adminRouter;
