@@ -1,5 +1,6 @@
 <%-include('./includes/header.ejs')  %>
 
+
 </head>
 
 <body>
@@ -14,24 +15,30 @@
             <div class="card">
               <div class="card-body">
                 <form action="/admin/generate-sales-report" method="post">
-                <div class="row">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label for="start-date">Start Date:</label>
-                      <input type="date" id="start-date" name="start-date" class="form-control">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="start-date">Start Date:</label>
+                        <input type="date" id="start-date" name="start-date" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="end-date">End Date:</label>
+                        <input type="date" id="end-date" name="end-date" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-md-3 pt-4">
+                      <button type="submit" class="btn btn-sm btn-primary" onclick="fetchOrders()">Fetch Orders</button>
+                    </div>
+                    <div class="col-md-3 pt-4">
+                      <button id="printButton" style="float: right;" type="button" class="btn btn-sm btn-outline-primary btn-icon-text">
+                        Print
+                        <i class="ti-printer btn-icon-append"></i>
+                      </button>
                     </div>
                   </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label for="end-date">End Date:</label>
-                      <input type="date" id="end-date" name="end-date" class="form-control">
-                    </div>
-                  </div>
-                  <div class="col-md-3 pt-4">
-                    <button type="submit" class="btn btn-sm btn-primary">Fetch Orders</button>
-                  </div>
-                </div>
-              </form>
+                </form>
 
 
 
@@ -40,7 +47,7 @@
                   <!-- Add class <code>.table-striped</code> -->
                 </p>
                 <!-- <a href="/admin/addcoupon"><button type="button" class="btn btn-primary">Add Coupons</button></a> -->
-                <div class="table-responsive">
+                <div class="table-responsive" id="sales-report">
                   <table class="table table-striped" id="myTable">
                     <thead>
                       <tr>
@@ -120,34 +127,104 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
+    <script>
+      document.getElementById("printButton").addEventListener("click", function() {
+        // Get the table content
+        const tableContent = document.getElementById("myTable").outerHTML;
+        const startDateElement = document.getElementById('start-date');
+        const startDate = startDateElement.value;
+        // Create a new window
+        const printWindow = window.open('', '_blank');
+
+        // Write the HTML content to the new window
+        printWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Sales Report</title>
+      <link rel="stylesheet" href="path/to/bootstrap.min.css"> <!-- Include Bootstrap CSS if needed -->
+      <!-- Include any other CSS files needed for printing -->
+      <style>
+        /* Custom styles for the print page */
+        body {
+          font-family: Arial, sans-serif;
+          margin: 20px;
+        }
+        h2 {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .date-info {
+          margin-bottom: 10px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+        }
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>Sales Report</h2>
+        ${startDate}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Sl No</th>
+              <th>Id</th>
+              <th>User Name</th>
+              <th>Payment method</th>
+              <th>Total</th>
+              <th>Date</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableContent}
+          </tbody>
+        </table>
+      </div>
+    </body>
+    </html>
+  `);
+
+        // Close the document after writing
+        printWindow.document.close();
+
+        // Print the new window
+        printWindow.print();
+      });
+    </script>
 
     <script>
       function fetchOrders() {
+        // Get the values of start date and end date inputs
         const startDate = document.getElementById('start-date').value;
         const endDate = document.getElementById('end-date').value;
-        if (!startDate || !endDate) {
-          alert('Please select both start date and end date.');
-          return;
-        }
-        // Assuming you'll make a fetch request to the backend to fetch orders
-        // Include the selected start date and end date in the request body
-        fetch('/fetch-orders', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              startDate,
-              endDate
-            })
+
+        // Make an Axios POST request to your backend endpoint
+        axios.post('/generate-sales-report', {
+            startDate: startDate,
+            endDate: endDate
           })
-          .then(response => response.json())
-          .then(data => {
-            // Handle the response data (e.g., display orders on the frontend)
-            console.log('Fetched orders:', data);
+          .then(function(response) {
+            // Handle success
+            console.log(response.data);
+            // You can update your UI here based on the response if needed
           })
-          .catch(error => {
-            console.error('Error fetching orders:', error);
+          .catch(function(error) {
+            console.log(error.message);
           });
       }
     </script>

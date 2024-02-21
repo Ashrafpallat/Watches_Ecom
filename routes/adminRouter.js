@@ -11,6 +11,7 @@ const productController = require('../controller/productController');
 const couponController = require('../controller/couponController');
 const orderController = require('../controller/orderController');
 const offerController = require('../controller/offerController')
+const axios = require('axios')
 const multer = require('multer');
 // adminRouter.use(express.static(path.join(__dirname, 'assets', 'productImages'))) // destination for file uploads
 

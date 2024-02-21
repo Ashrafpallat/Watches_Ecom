@@ -158,27 +158,25 @@ const loadSalesReport = async (req, res) => {
     }
 }
 
+const moment = require('moment');
 const generateSalesReport = async (req, res) => {
     try {
-        console.log(req.body);
-        const startDate = new Date(req.body.startDate);
-        const endDate = new Date(req.body.endDate);
-        const orders = await orderModel.aggregate([
-            {
-                $match: {
-                    createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
-                    status: "Delivered" // Assuming "Delivered" is the status for delivered orders
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalAmount: { $sum: "$totalamount" }
-                }
-            }
-        ]);
-        const totalDeliveredAmount = orders.length > 0 ? orders[0].totalAmount : 0;
-        res.render('admin/sales-report', { user: adminData, orders, totalDeliveredAmount })
+        console.log('body ', req.body);
+        const adminData = await User.findById({ _id: req.session.admin_id });
+        const startDate = moment(req.body['start-date'].trim()).toISOString();
+        const endDate = moment(req.body['end-date'].trim()).toISOString();
+        console.log('generated dates ', startDate, endDate);
+        const orders = await orderModel.find({
+            createdAt: { $gte: startDate, $lte: endDate },
+            status: 'Delivered'
+        })
+            .populate('user')
+            .populate('items.product');
+
+        const totalDeliveredAmount = orders.reduce((total, order) => {
+            return total + order.totalAmount;
+        }, 0); res.render('admin/sales-report', { user: adminData, orders, totalAmount: totalDeliveredAmount })
+
     } catch (error) {
         console.log(error.message);
     }
