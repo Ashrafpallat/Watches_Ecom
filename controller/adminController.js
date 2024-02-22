@@ -163,8 +163,9 @@ const generateSalesReport = async (req, res) => {
     try {
         console.log('body ', req.body);
         const adminData = await User.findById({ _id: req.session.admin_id });
-        const startDate = moment(req.body['start-date'].trim()).toISOString();
-        const endDate = moment(req.body['end-date'].trim()).toISOString();
+        const startDate = moment(req.body.startDate.trim()).toISOString();
+        const endDate = moment(req.body.endDate.trim()).toISOString();
+
         console.log('generated dates ', startDate, endDate);
         const orders = await orderModel.find({
             createdAt: { $gte: startDate, $lte: endDate },
@@ -173,9 +174,17 @@ const generateSalesReport = async (req, res) => {
             .populate('user')
             .populate('items.product');
 
-        const totalDeliveredAmount = orders.reduce((total, order) => {
-            return total + order.totalAmount;
-        }, 0); res.render('admin/sales-report', { user: adminData, orders, totalAmount: totalDeliveredAmount })
+        // const totalDeliveredAmount = orders.reduce((total, order) => {
+        //     return total + order.totalAmount;
+        // }, 0); 
+        // res.render('admin/sales-report', { user: adminData, orders, totalAmount: totalDeliveredAmount })
+
+
+
+        res.json({ success: true, orders: orders });
+
+
+
 
     } catch (error) {
         console.log(error.message);

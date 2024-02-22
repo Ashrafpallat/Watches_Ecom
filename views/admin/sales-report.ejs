@@ -14,31 +14,31 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <form action="/admin/generate-sales-report" method="post">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="start-date">Start Date:</label>
-                        <input type="date" id="start-date" name="start-date" class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="end-date">End Date:</label>
-                        <input type="date" id="end-date" name="end-date" class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-3 pt-4">
-                      <button type="submit" class="btn btn-sm btn-primary" onclick="fetchOrders()">Fetch Orders</button>
-                    </div>
-                    <div class="col-md-3 pt-4">
-                      <button id="printButton" style="float: right;" type="button" class="btn btn-sm btn-outline-primary btn-icon-text">
-                        Print
-                        <i class="ti-printer btn-icon-append"></i>
-                      </button>
+                <!-- <form> -->
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="start-date">Start Date:</label>
+                      <input type="date" id="start-date" name="start-date" class="form-control">
                     </div>
                   </div>
-                </form>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="end-date">End Date:</label>
+                      <input type="date" id="end-date" name="end-date" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-3 pt-4">
+                    <button type="submit" class="btn btn-sm btn-primary" onclick="fetchOrders()">Fetch Orders</button>
+                  </div>
+                  <div class="col-md-3 pt-4">
+                    <button id="printButton" style="float: right;" type="button" class="btn btn-sm btn-outline-primary btn-icon-text">
+                      Print
+                      <i class="ti-printer btn-icon-append"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- </form> -->
 
 
 
@@ -132,7 +132,9 @@
         // Get the table content
         const tableContent = document.getElementById("myTable").outerHTML;
         const startDateElement = document.getElementById('start-date');
+        const endDateElement = document.getElementById('end-date');
         const startDate = startDateElement.value;
+        const endDate = endDateElement.value;
         // Create a new window
         const printWindow = window.open('', '_blank');
 
@@ -175,27 +177,17 @@
       </style>
     </head>
     <body>
-      <div class="container">
-        <h2>Sales Report</h2>
-        ${startDate}
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Sl No</th>
-              <th>Id</th>
-              <th>User Name</th>
-              <th>Payment method</th>
-              <th>Total</th>
-              <th>Date</th>
-              <th>Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${tableContent}
-          </tbody>
-        </table>
-      </div>
-    </body>
+  <div class="container">
+    <h2>Sales Report</h2>
+    <p>From: ${startDate} To: ${endDate}</p>
+    <table class="table table-striped">
+      <tbody>
+        ${tableContent}
+      </tbody>
+    </table>
+  </div>
+</body>
+
     </html>
   `);
 
@@ -208,24 +200,77 @@
     </script>
 
     <script>
+      // function fetchOrders() {
+      //   // Get the values of start date and end date inputs
+      //   const startDate = document.getElementById('start-date').value;
+      //   const endDate = document.getElementById('end-date').value;
+
+      //   // Make an Axios POST request to your backend endpoint
+      //   axios.post('/generate-sales-report', {
+      //       startDate: startDate,
+      //       endDate: endDate
+      //     })
+      //     .then(function(response) {
+      //       // Handle success
+      //       console.log(response.data);
+      //       // You can update your UI here based on the response if needed
+      //     })
+      //     .catch(function(error) {
+      //       console.log(error.message);
+      //     });
+      // }
+
       function fetchOrders() {
         // Get the values of start date and end date inputs
-        const startDate = document.getElementById('start-date').value;
-        const endDate = document.getElementById('end-date').value;
+        const startDate = $('#start-date').val();
+        const endDate = $('#end-date').val();
 
-        // Make an Axios POST request to your backend endpoint
-        axios.post('/generate-sales-report', {
+        // Make an AJAX POST request
+        $.ajax({
+          url: '/admin/generate-sales-report',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
             startDate: startDate,
             endDate: endDate
-          })
-          .then(function(response) {
-            // Handle success
-            console.log(response.data);
-            // You can update your UI here based on the response if needed
-          })
-          .catch(function(error) {
-            console.log(error.message);
-          });
+          }),
+          success: function(response) {
+            if (response.success) {
+              console.log('success');
+              // Handle success 
+
+              // Update the table with the received orders data
+              updateTable(response.orders);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('Request failed:', status);
+          }
+        });
+      }
+
+
+      // Function to update the table with orders data
+      function updateTable(orders) {
+        const tableBody = document.querySelector('#myTable tbody');
+        // Clear existing table rows
+        tableBody.innerHTML = '';
+
+        // Loop through the orders and append rows to the table
+        orders.forEach(function(order, index) {
+          const row = `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${order._id}</td>
+                <td>${order.user.fname}</td>
+                <td>${order.paymentMethod}</td>
+                <td>₹ ${order.totalAmount}</td>
+                <td>${order.createdAt}</td>
+                <td>${order.selectedAddress}</td>
+            </tr>
+        `;
+          tableBody.innerHTML += row;
+        });
       }
     </script>
 
