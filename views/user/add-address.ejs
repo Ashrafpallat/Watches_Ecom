@@ -54,7 +54,7 @@
                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                   <div class="form-group">
                     <label for="fullName">Full Name</label>
-                    <input type="text" name="addressName" class="form-control" id="fullName" required>
+                    <input type="text" name="addressName" class="form-control" id="fullName" pattern="[^\s].*" title="Leading spaces not allowed" required>
                   </div>
                 </div>
               </div>
@@ -79,19 +79,19 @@
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                   <div class="form-group">
                     <label for="Street">Locality</label>
-                    <input type="name" name="locality" class="form-control" id="Street" placeholder="Locality" required>
+                    <input type="name" name="locality" class="form-control" id="Street" pattern="[^\s].*" title="Leading spaces are not allowed" placeholder="Locality" required>
                   </div>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                   <div class="form-group">
                     <label for="ciTy">City</label>
-                    <input type="name" name="city" class="form-control" id="ciTy" placeholder="Enter City" required>
+                    <input type="name" name="city" class="form-control" id="ciTy" pattern="[^\s].*" title="Leading spaces are not allowed" placeholder="Enter City" required>
                   </div>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                   <div class="form-group">
                     <label for="sTate">State</label>
-                    <input type="text" name="state" class="form-control" id="sTate" placeholder="Enter State" required>
+                    <input type="text" name="state" class="form-control" id="sTate" pattern="[^\s].*" title="Leading spaces are not allowed" placeholder="Enter State" required>
                   </div>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -115,7 +115,7 @@
                   </div>
                 </div>
                 <!-- <button type="submit" id="submit" name="submit" class="btn btn-light">Add new address</button> -->
-                
+
             </form>
           </div>
         </div>
@@ -123,11 +123,19 @@
     </div>
   </div>
 </div>
-</div>
-</div>
-</div>
-</div>
 
-</div>
+<script>
+  document.getElementById('phone').addEventListener('input', function(event) {
+      const input = event.target;
+      const value = input.value.trim();
+      const isNumeric = /^[0-9]*$/.test(value); // Check if value contains only digits
+      
+      if (value.length !== 10 || !isNumeric) {
+          input.setCustomValidity("Please enter exactly 10 numeric digits.");
+      } else {
+          input.setCustomValidity(""); // Reset custom validity message
+      }
+  });
+</script>
 <%-include('./includes/footerNav.ejs')  %>
 <%-include('./includes/footer.ejs')  %>

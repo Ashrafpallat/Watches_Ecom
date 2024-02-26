@@ -65,23 +65,23 @@
                           <!-- Address Name -->
                           <div class="mb-3">
                             <label for="addressName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" name="addressName" id="addressName" required>
+                            <input type="text" class="form-control" name="addressName" pattern="[^\s].*" title="Leading spaces not allowed" id="addressName" required>
                           </div>
                           <div class="mb-3">
                             <label for="addressName" class="form-label">Phone</label>
-                            <input type="number" class="form-control" name="addressPhone" id="addressPhone" required>
+                            <input type="number" class="form-control" name="addressPhone" id="phone" required>
                           </div>
                           <div class="mb-3">
                             <label for="addressName" class="form-label">Locality</label>
-                            <input type="text" class="form-control" name="locality" id="locality" required>
+                            <input type="text" class="form-control" name="locality" pattern="[^\s].*" title="Leading spaces are not allowed" id="locality" required>
                           </div>
                           <div class="mb-3">
                             <label for="addressName" class="form-label">City </label>
-                            <input type="text" class="form-control" name="city" id="addressName" required>
+                            <input type="text" class="form-control" name="city" pattern="[^\s].*" title="Leading spaces are not allowed" id="addressName" required>
                           </div>
                           <div class="mb-3">
                             <label for="addressName" class="form-label">State </label>
-                            <input type="text" class="form-control" name="state" id="addressName" required>
+                            <input type="text" class="form-control" name="state" pattern="[^\s].*" title="Leading spaces are not allowed" id="addressName" required>
                           </div>
                           <div class="mb-3">
                             <label for="addressName" class="form-label">Pin Code </label>
@@ -343,6 +343,21 @@
 </div>
 </section>
 <%-include('./includes/footerNav.ejs')  %>
+
+<script>
+  document.getElementById('phone').addEventListener('input', function(event) {
+      const input = event.target;
+      const value = input.value.trim();
+      const isNumeric = /^[0-9]*$/.test(value); // Check if value contains only digits
+      
+      if (value.length !== 10 || !isNumeric) {
+          input.setCustomValidity("Please enter exactly 10 numeric digits.");
+      } else {
+          input.setCustomValidity(""); // Reset custom validity message
+      }
+  });
+</script>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   async function addressGive(event) {
