@@ -13,13 +13,18 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
+                <% if (coupon.length>0) { %>
                 <h4 class="card-title">All Coupons</h4>
+                 <% } else { %>
+                <h4 class="card-title">No existing coupons</h4>
+                <% } %>
                 <p class="card-description">
                   <!-- Add class <code>.table-striped</code> -->
                 </p>
                 <a href="/admin/addcoupon"><button type="button" class="btn btn-primary">Add Coupons</button></a>
                 <div class="table-responsive">
-                  <table class="table table-striped" id="myTable">
+                  <% if (coupon.length>0) { %>
+                   <table class="table table-striped" id="myTable">
                     <thead>
                       <tr>
                         <th>
@@ -40,7 +45,6 @@
                         <th>
                           Disc Amount
                         </th>
-                        
                         <th>
                           Status
                         </th>
@@ -51,7 +55,6 @@
                     </thead>
                     <tbody>
                       <% coupon.forEach(coupon=> { %>
-
                       <tr>
                         <td>
                           <%= coupon.couponName %>
@@ -68,26 +71,23 @@
                         <td>
                           <%= coupon.discountAmount %>
                         </td>
-                        
                         <td>
                           <%= coupon.status %>
-
                         </td>
                         <td>
                           <div style="margin-bottom: 5px;">
                             <% if(coupon.status=='Active'){ %>
                             <a href="" class="btn btn-sm  btn-danger" style="width: 100px;" onclick="unlistCoupon(event,'<%=coupon._id  %>');">Unlist</a>
-
                             <% }else{ %>
                             <a href="" class="btn btn-sm btn-success" style="width: 100px;" onclick="listCoupon(event,'<%=coupon._id  %>');">List</a>
                             <% } %>
                         </td>
-
                       </tr>
-
                       <% }); %>
                     </tbody>
                   </table>
+                  <% } %>
+                  
                 </div>
               </div>
             </div>
