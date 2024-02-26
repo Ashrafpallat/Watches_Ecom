@@ -99,7 +99,7 @@
                     </div>
                   </div> -->
                   <div class="row flex-grow">
-                    <div class="col-8 grid-margin stretch-card">
+                    <div class="col-12 grid-margin stretch-card">
                       <div class="card card-rounded">
                         <div class="card-body">
                           <div class="d-sm-flex justify-content-between align-items-start">
@@ -159,6 +159,70 @@
                       </div> -->
                       </div>
                   </div>
+
+                  <div class="row flex-grow">
+                    <div class="col-12 grid-margin stretch-card">
+                      <div class="card card-rounded">
+                        <div class="card-body">
+                          <div class="d-sm-flex justify-content-between align-items-start">
+                            <h4 class="card-title card-title-dash">Top Selling Products</h4>
+                          </div>
+                          <div class="table-responsive  mt-1">
+                            <table class="table select-table">
+                              <thead>
+                                <tr>
+                                  <th>Product</th>
+                                  <th>Stock</th>
+                                  <th>Price</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% topProducts.forEach(product => { %>
+                                <tr>
+                                  <td>
+                                    <div class="d-flex ">
+                                      <img src="/<%= product.productDetails[0].imageURLs[3] %>" alt="">
+                                      <div>
+                                        <h6><%= product.productDetails[0].title %></h6>
+                                        <p> <%= product.productDetails[0].description %></p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <h6> <%= product.totalQuantity %></h6>
+                                    <!-- <p> Verified: <%= user.verified %></p> -->
+                                  </td>
+                                  <td>
+                                    <h6>₹<%= product.productDetails[0].price %></h6>
+                                  </td>
+                                  <td>
+                                    <% if (product.productDetails[0].status === 'listed') { %>
+                                    <div class="badge badge-opacity-success">Active</div>
+                                    <% } else { %>
+                                    <div class="badge badge-opacity-danger" style="background: rgb(255, 212, 212);">Incactive</div>
+                                    <% } %>
+                                  </td>
+                                </tr>
+                                <% }) %>
+
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4 grid-margin stretch-card">
+                      <!-- <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Pie chart</h4>
+                          <canvas id="pieChart"></canvas>
+                        </div>
+                      </div> -->
+                      </div>
+                  </div>
+
+                  
 
                 </div>
                 <!-- main-panel ends -->

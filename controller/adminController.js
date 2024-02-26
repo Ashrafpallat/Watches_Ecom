@@ -90,6 +90,7 @@ const loadDashboard = async (req, res) => {
         const userCountsByMonth = monthLabels.map((label, index) => usersByMonth[index] || 0);
 
         // Monthly orders
+
         // Filter orders for the current year
         const ordersThisYear = orders.filter(order => order.createdAt.getFullYear() === currentYear);
 
@@ -122,10 +123,33 @@ const loadDashboard = async (req, res) => {
         } else {
             console.log('No non-delivered orders found.');
         }
-        console.log('by month ', orderCountsByMonth);
+
+
+        const topProducts = await orderModel.aggregate([
+            // Unwind the items array to de-normalize
+            { $unwind: "$items" },
+            // Group by product and sum the quantities
+            { $group: {
+                _id: "$items.product",
+                totalQuantity: { $sum: "$items.quantity" }
+            }},
+            // Sort by total quantity in descending order
+            { $sort: { totalQuantity: -1 } },
+            // Limit to the top 3
+            { $limit: 3 },
+            // Populate the product details using the ref field
+            { $lookup: {
+                from: "products",  // Assuming your product model is named 'Product'
+                localField: "_id",
+                foreignField: "_id",
+                as: "productDetails"
+            }}
+        ]);
+        console.log('top products ',topProducts);
+
         res.render('admin/dashboard', {
             user: adminData, totalRevenue, totalNonDeliveredOrders, totalOrders, totalUsers, totalProducts, orderCounts, userCounts,
-            orderCountsByMonth, userCountsByMonth, allUsers,
+            orderCountsByMonth, userCountsByMonth, allUsers, topProducts,
         });
     } catch (error) {
         console.log(error.message);
@@ -147,7 +171,7 @@ const loadSalesReport = async (req, res) => {
             // Calculate the total amount for each order
             let orderTotal = 0;
             for (const item of order.items) {
-                orderTotal += item.quantity * item.product.price; // Assuming each item has a 'quantity' and 'product' field with 'price'
+                orderTotal += item.quantity * item.product.price; 
             }
             totalAmount += orderTotal;
         }
