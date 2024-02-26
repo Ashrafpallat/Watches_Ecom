@@ -119,7 +119,11 @@
               </div>
 
               <div class="d-flex justify-content-between pt-2">
+                <% if (order.orderId) { %>
+                <p class="text-muted mb-0">Order Id : <%= order.orderId %></p>
+                <% } else { %>
                 <p class="text-muted mb-0">Order Id : <%= order._id %></p>
+                <% } %>
                 <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p> -->
                 <p class="text-muted mb-0 " style="font-weight: bold;">Status : <%= order.status %></p>
 

@@ -31,7 +31,11 @@
                   <tbody>
                     <% order.forEach(order => { %>
                       <tr>
+                        <% if (order.orderId) { %>
+                        <td><%= order.orderId %></td>
+                         <% } else { %>
                         <td><%= order._id %></td>
+                        <% } %>
                         <td><%= order.paymentMethod %></td>
                         <td>₹ <%= order.totalAmount %></td>
                         <td><%= order.status %></td>

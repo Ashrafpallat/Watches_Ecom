@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
-
+const orderid = require('order-id')('key');
 const orderSchema = new mongoose.Schema({
+    orderId: {
+        type: String,
+        unique: true,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -32,7 +36,7 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    selectedAddress:{
+    selectedAddress: {
         type: String,
     },
 
@@ -50,6 +54,15 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+});
+
+orderSchema.pre('save', async function (next) {
+    try {
+        this.orderId = orderid.generate();
+        next();
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = mongoose.model('Order', orderSchema);

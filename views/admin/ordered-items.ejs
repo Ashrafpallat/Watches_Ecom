@@ -19,7 +19,12 @@
                   <section>
                     <h2>Order Information</h2>
                     <!-- Display order details here -->
-                    <p>Order ID: <%= order._id %></p>
+                    <p>Order ID:
+                      <% if (order.orderId) { %>
+                        <%= order.orderId %></p>
+                        <% } else { %>
+                       <%= order._id %></p>
+                      <% } %>
                     <p>Order Date: <%= order.createdAt.toLocaleDateString() %></p>
                     <p>Total Amount: <%= order.totalAmount %></p>
                     <p>Payment Method: <%= order.paymentMethod %></p>
