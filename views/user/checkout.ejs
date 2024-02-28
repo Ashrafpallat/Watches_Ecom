@@ -224,7 +224,7 @@
 
             <!-- Function to calculate the price -->
             <% function calculateTotalPrice(items) { %>
-            <% let totalPrice = 0; %>
+            <% var totalPrice = 0; %>
             <% items.forEach(item => { %>
 
             <% if (item.productId.offer && item.productId.offer.percentage) { %>
@@ -277,14 +277,14 @@
                     Online Payment (Razorpay)
                   </label>
                 </div>
-                <div class="form-check">
+                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery" value="COD">
                   <label class="form-check-label" for="cashOnDelivery">
                     Cash on Delivery
                   </label>
-
-
                 </div>
+                
+                
               </div>
               <button onclick="addressGive(event)" class="btn btn-success shadow-0 border">Place order</button>
             </form>
@@ -398,7 +398,6 @@
         } else {
           razorpayPayment(response.razorpayOrder);
         }
-
       }
     })
 

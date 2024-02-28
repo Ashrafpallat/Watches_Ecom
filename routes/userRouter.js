@@ -41,6 +41,8 @@ userRouter.route('/login')
 userRouter.route('/verifyOTP')
     .get(auth.isUserLogout, userController.loadVerifyOTP)
     .post(userController.verifyOTP)
+// Resend OTP
+userRouter.get('/resendOTP', userController.resendOTP)
 
 userRouter.get('/home', userController.loadHome)
 userRouter.get('/products', userController.loadProducts)
@@ -88,6 +90,8 @@ userRouter.get('/order-details/:id', auth.isUserLogin, userController.loadOrderD
 userRouter.post('/cancel-order', userController.cancelOrder)
 userRouter.post('/return-order', userController.sendReturnRequest)
 userRouter.post('/cancel-return', userController.cancelReturnRequest)
+// Continue payment
+userRouter.post('/continue-payment',userController.continuePayment)
 // Forgot password
 userRouter.post('/forgot-password', userController.sendOTP)
 userRouter.route('/verifyOTP2')

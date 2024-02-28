@@ -1,111 +1,96 @@
 <%-include('./includes/header.ejs')  %>
 
-	<div class="men_banner">	
-		<%- include('./includes/headerNav.ejs')%>
+<div class="men_banner">
+  <%- include('./includes/headerNav.ejs')%>
 
 
 
-	<div class="account-in">
-		<div class="container">
-			<% if (message && message.length> 0) { %>
-				<div class="alert alert-danger" role="alert">
-					<%= message[0] %>
-				</div>
-				<% } %>
-			<!-- <% if (message.success && message.length> 0) { %>
+  <div class="account-in">
+    <div class="container">
+      <% if (message && message.length> 0) { %>
+      <div class="alert alert-danger" role="alert">
+        <%= message[0] %>
+      </div>
+      <% } %>
+      <!-- <% if (message.success && message.length> 0) { %>
 				<div class="alert alert-success" role="alert">
 					<%= message[0] %>
 				</div>
 				<% } %> -->
-					<form method="post" id="registration-form">
-						<div class="register-top-grid">
-							<h2>PERSONAL INFORMATION</h2>
-							<div>
-								<span>User Name<label>*</label></span>
-								<input type="text" name="fname" pattern="[a-zA-Z0-9]+"
-									title="Username can only contain letters and numbers" required>
-							</div>
-							<!-- <div>
+      <form method="post" id="registration-form">
+        <div class="register-top-grid">
+          <h2>PERSONAL INFORMATION</h2>
+          <div>
+            <span>User Name<label>*</label></span>
+            <input type="text" name="fname" pattern="[a-zA-Z0-9]+" title="Username can only contain letters and numbers" required>
+          </div>
+          <!-- <div>
 				<span>Last Name<label>*</label></span>
 				<input type="text" name="lname"> 
 			 </div> -->
-							<div>
-								<span>Email Address<label>*</label></span>
-								<input type="email" name="email" required>
-							</div>
-							<div>
-								<span>Mobile<label>*</label></span>
-								<!-- <input type="number" name="mobile" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number"  required>  -->
-								<!-- <label for="phone">Phone:</label> -->
-								<input type="tel" id="phone" name="phone" pattern="[0-9]{10}"
-									title="Please enter a valid 10-digit phone number" required>
+          <div>
+            <span>Email Address<label>*</label></span>
+            <input type="email" name="email" required>
+          </div>
+          <div>
+            <span>Mobile<label>*</label></span>
+            <!-- <input type="number" name="mobile" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number"  required>  -->
+            <!-- <label for="phone">Phone:</label> -->
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" required>
 
-							</div>
-							<div class="clearfix"> </div>
-							<a class="news-letter" href="#">
-								<!-- <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>Sign Up for Newsletter</label> -->
-							</a>
-						</div>
-						<div class="register-bottom-grid">
-							<!-- <h2>Password</h2> -->
-							<div>
-								<span>Password<label>*</label></span>
-								<!-- <input type="password" id="password" name="password"
+          </div>
+          <div class="clearfix"> </div>
+          <a class="news-letter" href="#">
+            <!-- <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>Sign Up for Newsletter</label> -->
+          </a>
+        </div>
+        <div class="register-bottom-grid">
+          <!-- <h2>Password</h2> -->
+          <div>
+            <span>Password<label>*</label></span>
+            <!-- <input type="password" id="password" name="password"
 									pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$"
 									title="Password must be at least 8 characters long and include at least one character and one number"
 									required> -->
-									<input type="password" name="password" id="password"
-									pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-									title="Password must be at least 8 characters long and include at least one letter, one number, and one symbol (@, $, !, %, *, ?, or &)"
-									required
-									oninvalid="this.setCustomValidity('')">
-							</div>
-							<div>
-								<span>Confirm Password<label>*</label></span>
-								<!-- <input type="password" name="cpassword" id="confirm-password"
+            <input type="password" name="password" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long and include at least one letter, one number, and one symbol (@, $, !, %, *, ?, or &)" required oninvalid="this.setCustomValidity('')">
+          </div>
+          <div>
+            <span>Confirm Password<label>*</label></span>
+            <!-- <input type="password" name="cpassword" id="confirm-password"
 									pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$"
 									title="Password must be at least 8 characters long and include at least one letter and one number"
 									required> -->
-									<input type="password" name="cpassword" id="password"
-									pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-									title="Password must be at least 8 characters long and include at least one letter, one number, and one symbol (@, $, !, %, *, ?, or &)"
-									required
-									oninvalid="this.setCustomValidity('')">
-							</div>
-							<p id="password-match-error" style="color: red;"></p>
-							<div class="register-but">
+            <input type="password" name="cpassword" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long and include at least one letter, one number, and one symbol (@, $, !, %, *, ?, or &)" required oninvalid="this.setCustomValidity('')">
+          </div>
+          <p id="password-match-error" style="color: red;"></p>
+          <div class="register-but">
 
-								<input type="submit" value="submit"><br><br>
-								<a href="/login">Already have an account, login now</a>
+            <input type="submit" value="submit"><br><br>
+            <a href="/login">Already have an account, login now</a>
 
-							</div>
-							
-							<div class="clearfix"> </div>
-						</div>
-					</form>
-					<!-- Confirm password -->
-					<script>
-						document.getElementById("registration-form").addEventListener("submit", function (event) {
-							var password = document.getElementById("password").value;
-							var confirmPassword = document.getElementById("confirm-password").value;
-							var passwordMatchError = document.getElementById("password-match-error");
+          </div>
 
-							if (password !== confirmPassword) {
-								passwordMatchError.textContent = "Passwords do not match!";
-								event.preventDefault(); // Prevent form submission
-							} else {
-								passwordMatchError.textContent = ""; // Clear any previous error message
-							}
-						});
-					</script>
-					<div class="clearfix"> </div>
+          <div class="clearfix"> </div>
+        </div>
+      </form>
+      <!-- Confirm password -->
+      <script>
+        document.getElementById("registration-form").addEventListener("submit", function(event) {
+          var password = document.getElementById("password").value;
+          var confirmPassword = document.getElementById("confirm-password").value;
+          var passwordMatchError = document.getElementById("password-match-error");
 
-		</div>
-	</div>
-	<!-- <div class="map">
-		<iframe
-			src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3150859.767904157!2d-96.62081048651531!3d39.536794757966845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1408111832978">
-		</iframe>
-	</div> -->
-	<%-include('./includes/footerNav.ejs')  %>
-	<%-include('./includes/footer.ejs')  %>
+          if (password !== confirmPassword) {
+            passwordMatchError.textContent = "Passwords do not match!";
+            event.preventDefault(); // Prevent form submission
+          } else {
+            passwordMatchError.textContent = ""; // Clear any previous error message
+          }
+        });
+      </script>
+      <div class="clearfix"> </div>
+
+    </div>
+  </div>
+  <%-include('./includes/footerNav.ejs')  %>
+  <%-include('./includes/footer.ejs')  %>

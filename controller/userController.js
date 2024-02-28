@@ -66,12 +66,12 @@ const insertUser = async (req, res) => {
             lname: req.body.lname,
             email: req.body.email,
             phone: req.body.phone,
-            // image: req.file.filename,
             password: sPassword,
             verified: false,
         })
 
         const userData = await user.save();
+        req.session.userRegId = userData._id
         sendOTPVerificationEmail(user, res);
 
         if (userData) {
@@ -313,6 +313,60 @@ const sendOTPVerificationEmail = async ({ _id, email }, res) => {
             otp: hashedOTP,
             recipient_email: email,
             createdAt: Date.now(),
+            expiresAt: Date.now() + 60000
+        });
+        // save otp record
+        await newOTPVerification.save();
+        await transporter.sendMail(mailOptions);
+        console.log("userid:", _id);
+        console.log("line 278 ", email);
+    } catch (error) {
+        console.log('generate otp err ', error.message);
+    }
+}
+
+
+const resendOTP = async (req, res) => {
+    try {
+        const userData = await User.findOne({_id:req.session.userRegId})
+        const { _id, email } = userData
+        const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+        console.log("Generated ", otp);
+        // mail options
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Verify you email",
+            // html: otp
+            html:
+
+                `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+            <div style="margin:50px auto;width:70%;padding:20px 0">
+                <div style="border-bottom:1px solid #F9D9BE">
+                    <a href="" style="background-color: black; font-size:1.4em;color: #F9D9BE;text-decoration:none;font-weight:600">W<span style="color: white;">atches</span></a>
+                </div>
+                <p style="font-size:1.1em">Hi,</p>
+                <p>Thank you for choosing Watches. Use the following OTP to complete your Sign Up procedures. OTP is valid for 2 minutes</p>
+                <h2 style="background: #F9D9BE;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${otp}</h2>
+                <p style="font-size:0.9em;">Regards,<br />Watches</p>
+                <hr style="border:none;border-top:1px solid #F9D9BE" />
+                <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+                    <p> Watches Inc</p>
+                     <!-- <p>1600 Amphitheatre Parkway</p>
+                    <p>California</p>  -->
+                </div>
+            </div>
+        </div> `
+        }
+        // hash the otp
+        const saltRounds = 10;
+        const hashedOTP = await bcrypt.hash(otp, saltRounds);
+        console.log('email', email);
+        const newOTPVerification = await new userOTPVerification({
+            userId: _id,
+            otp: hashedOTP,
+            recipient_email: email,
+            createdAt: Date.now(),
             expiresAt: Date.now() + 120000
         });
         // save otp record
@@ -324,11 +378,11 @@ const sendOTPVerificationEmail = async ({ _id, email }, res) => {
         console.log('generate otp err ', error.message);
     }
 }
+
 // verifying OTP 
 const verifyOTP = async (req, res) => {
     try {
         let { otp, email } = req.body;
-        // const email = req.query.email;
         console.log('entered otp', otp);
         console.log('query email', email);
         if (!email || !otp) {
@@ -710,6 +764,29 @@ const placeOrder = async (req, res) => {
     }
 }
 
+const continuePayment = async (req, res) => {
+    try {
+        const orderId = req.body.orderId
+        var options = {
+            amount: parseInt(req.body.totalAmount) * 100,  // amount in the smallest currency unit
+            currency: "INR",
+            receipt: orderId
+        };
+        instance.orders.create(options, function (err, razorpayOrder) {
+            if (err) {
+                console.log(err);
+            } else {
+                // res.status(201).json(razorpayOrder); // Sending the created order as a response
+                res.json({ razorpayOrder });
+
+                console.log('razorpay order ', razorpayOrder);
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 const verifyPayment = async (req, res) => {
     try {
         const userId = req.session.user_id;
@@ -1061,7 +1138,7 @@ const generateInvoicePDF = async (req, res) => {
         const totalPrice = order.totalAmount
 
         // Generate the PDF buffer
-        const pdfBuffer = await generatePDFBuffer(orderId, orderedItems, totalPrice , address, userData);
+        const pdfBuffer = await generatePDFBuffer(orderId, orderedItems, totalPrice, address, userData);
 
         // Set the appropriate headers for file download
         res.setHeader('Content-Type', 'application/pdf');
@@ -1129,17 +1206,17 @@ const generatePDFBuffer = async (orderId, orderedItems, totalPrice, address, use
         </thead>
         <tbody>
         ${(() => {
-        let rows = '';
-        orderedItems.forEach(item => {
-            rows += `
+            let rows = '';
+            orderedItems.forEach(item => {
+                rows += `
                     <tr>
                         <td>${item.product.title}</td>
                         <td>₹${item.product.price.toFixed(2)}</td>
                     </tr>
                 `;
-        });
-        return rows;
-    })()}
+            });
+            return rows;
+        })()}
         </tbody>
     </table>
     <!-- Total Price outside the table -->
@@ -1211,6 +1288,6 @@ module.exports = {
     resetPassword,
     verifyPayment,
     generateInvoicePDF,
-
-
+    continuePayment,
+    resendOTP,
 }

@@ -112,7 +112,7 @@
               </div> -->
 
               <div class="d-flex justify-content-between pt-2">
-              <a href="/generateInvoice/<%= order._id %>" id="downloadInvoiceButton" >Download Invoice</a>
+                <a href="/generateInvoice/<%= order._id %>" id="downloadInvoiceButton">Download Invoice</a>
 
                 <!-- <p class="fw-bold mb-0">Order Details</p> -->
                 <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span>₹ <%= order.totalAmount %></p>
@@ -141,6 +141,9 @@
               <div class="d-flex justify-content-between mb-5">
                 <p class="text-muted mb-0">Address : <%= order.selectedAddress %></p>
                 <div class="col-md-2">
+                  <% if (order.status === 'Payment Pending') { %>
+                  <a href="" class="btn btn-sm btn-danger" onclick="continuePayment(event,'<%= order._id %>')">Continue payment</a><br><br>
+                  <% } %>
                   <% if (order.status !== 'Delivered' && order.status !== 'Pending') { %>
                   <a href="" class="btn btn-sm btn-danger" onclick="cancelOrder(event,'<%= order._id %>')">Cancel Order</a><br><br>
                   <% } else if (order.status === 'Pending') { %>
@@ -169,6 +172,73 @@
   </section>
 
   <script>
+    async function continuePayment(event, orderId) {
+      const response = await $.ajax({
+        type: 'POST',
+        data: {
+          orderId: orderId
+        },
+        url: '/continue-payment'
+      });
+      if (response) {
+        razorpayPayment(response.razorpayOrder)
+      }
+    }
+
+    function razorpayPayment(order) {
+      console.log('razorder', order);
+      console.log(order.amount);
+
+      var options = {
+        "key": 'rzp_test_WMFGNMq1lP6s4b', // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Watches  ",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function(response) {
+          // alert(response.razorpay_payment_id);
+          // alert(response.razorpay_order_id);
+          // alert(response.razorpay_signature);
+          verifyPayment(response, order)
+        },
+        "prefill": {
+          "name": "Gaurav Kumar",
+          "email": "gaurav.kumar@example.com",
+          "contact": "9000090000"
+        },
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#F9D9BE"
+        }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+
+    }
+
+    function verifyPayment(response, order) {
+      console.log('verifyPayment called');
+      $.ajax({
+        url: '/verifyPayment',
+        method: 'post',
+        data: {
+          response,
+          order,
+        },
+        success: (response) => {
+          if (response.status) {
+            window.location.href = '/order-placed';
+          }
+        }
+      })
+    }
+  
+
+
     async function cancelOrder(event, orderId) {
       event.preventDefault();
       Swal.fire({
