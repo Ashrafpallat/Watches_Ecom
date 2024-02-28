@@ -1,7 +1,15 @@
 <%-include('./includes/header.ejs')  %>
 
 
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script type="application/x-javascript">
+  addEventListener("load", function() {
+    setTimeout(hideURLbar, 0);
+  }, false);
+
+  function hideURLbar() {
+    window.scrollTo(0, 1);
+  }
+</script>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <!-- Custom Theme files -->
@@ -14,59 +22,67 @@
 <!-- start menu -->
 <link href="css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript" src="js/megamenu.js"></script>
-<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+<script>
+  $(document).ready(function() {
+    $(".megamenu").megamenu();
+  });
+</script>
 <script src="js/jquery.easydropdown.js"></script>
 <script src="js/simpleCart.min.js"> </script>
 </head>
+
 <body>
-	<div class="men_banner">
+  <div class="men_banner">
     <%- include('./includes/headerNav.ejs', { cartItemsLength: cart && cart.items ? cart.items.length : 0 }) %>
 
-   <div class="account-in">
-   	 <div class="container">
-		  <div class="check_box">	 
-		<div class="col-md-9 cart-items">
+    <div class="account-in">
+      <div class="container">
+        <div class="check_box">
+          <div class="col-md-9 cart-items">
             <% if (wishlistItems && wishlistItems.length > 0) { %>
-				<h1>Wishlist items (<%= wishlistItems.length %>)</h1>
-                <ul>
-                  <% wishlistItems.forEach(item => { %>
-                    <div class="cart-header">
+            <h1>Wishlist items (<%= wishlistItems.length %>)</h1>
+            <ul>
+              <% wishlistItems.forEach(item => { %>
+              <div class="cart-header">
 
-                        <a href="/delete-from-wishlist/<%= item._id %> " onclick="return confirm('Are you sure want to remove this product ?');"> <div class="close1"> </div></a>
-        
-                           <div class="cart-sec simpleCart_shelfItem">
-                                <div class="cart-item cyc">
-                                     <img style="width: 220px; height: 290px;" src="<%= item.productId.imageURLs[3] %>" class="img-responsive" alt=""/>
-                                </div>
-                               <div class="cart-item-info">
-                                <h3><a href="#"><%= item.productId.title %></a><span><%= item.productId.description %></span></h3>
-                                <ul class="qty">
-                                    <!-- <li><p>Size : 5</p></li> -->
-                                    <!-- <li><p>Qty : <%= item.quantity %></p></li>	 -->
-                                    <!-- <a class="button item_add cbp-vm-icon cbp-vm-add" href="/add-to-cart/<%= item._id %>">+</a>	 -->
-                                </ul>
-                                <div class="delivery">
-                                     <p>Price : <%= item.productId.price %></p>
-                                     <!-- <span>Delivered in 2-3 business days</span>
-                                     <div class="clearfix"></div> -->   
-                                </div>	
-                               </div>
-                               <div class="clearfix"></div>
-                            </div>
-                     </div>
-                  <% }); %>
-                </ul>
-              <% } else { %>
-                <h4>The wishlist is empty.</h4>
-				<a class="cpns" href="/products">Shop now </a>
-              <% } %>
+                <a href="/delete-from-wishlist/<%= item._id %> " onclick="return confirm('Are you sure want to remove this product ?');">
+                  <div class="close1"> </div>
+                </a>
+
+                <div class="cart-sec simpleCart_shelfItem">
+                  <div class="cart-item cyc">
+                    <img style="width: 220px; height: 290px;" src="<%= item.productId.imageURLs[3] %>" class="img-responsive" alt="" />
+                  </div>
+                  <div class="cart-item-info">
+                    <h3><a href="#"><%= item.productId.title %></a><span><%= item.productId.description %></span></h3>
+                    <ul class="qty">
+                      <!-- <li><p>Size : 5</p></li> -->
+                      <!-- <li><p>Qty : <%= item.quantity %></p></li>	 -->
+                      <!-- <a class="button item_add cbp-vm-icon cbp-vm-add" href="/add-to-cart/<%= item._id %>">+</a>	 -->
+                    </ul>
+                    <div class="delivery">
+                      <p>Price : <%= item.productId.price %></p>
+                      <!-- <span>Delivered in 2-3 business days</span>
+                                     <div class="clearfix"></div> -->
+                    </div>
+                    <a class="btn btn-light item_add cbp-vm-icon cbp-vm-add" href="/add-to-cart/<%= item.productId._id %>">Add to cart</a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+              <% }); %>
+            </ul>
+            <% } else { %>
+            <h4>The wishlist is empty.</h4>
+            <a class="cpns" href="/products">Shop now </a>
+            <% } %>
 
 
 
 
 
-	  </div>
-   </div>
+          </div>
+        </div>
 
-   <%-include('./includes/footerNav.ejs')  %>
-   <%-include('./includes/footer.ejs')  %>
+        <%-include('./includes/footerNav.ejs')  %>
+        <%-include('./includes/footer.ejs')  %>
