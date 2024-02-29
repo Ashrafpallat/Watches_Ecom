@@ -60,7 +60,11 @@
                           <% } %>
                         </td>
                         <td>
+                          <% if (order.user) { %>
                             <%= order.user.fname %>
+                           <% } else { %>
+                            <p>Unknown</p>
+                          <% } %>
                         </td>
                         <td>
                             <%= order.paymentMethod %>

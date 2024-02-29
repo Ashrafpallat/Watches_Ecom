@@ -15,6 +15,7 @@ const fs = require('fs');
 
 const nodemailer = require('nodemailer');
 const Razorpay = require('razorpay');
+const Wallet = require('../model/wallet-model');
 var instance = new Razorpay({
     key_id: 'rzp_test_WMFGNMq1lP6s4b',
     key_secret: 'f8OZaeUgk7Yo8Ufa8qK5L1qF',
@@ -328,7 +329,7 @@ const sendOTPVerificationEmail = async ({ _id, email }, res) => {
 
 const resendOTP = async (req, res) => {
     try {
-        const userData = await User.findOne({_id:req.session.userRegId})
+        const userData = await User.findOne({ _id: req.session.userRegId })
         const { _id, email } = userData
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
         console.log("Generated ", otp);
@@ -914,6 +915,22 @@ const cancelOrder = async (req, res) => {
             const productId = orderItem.product;
             const quantity = orderItem.quantity;
 
+            let wallet = await Wallet.findOne({ user: order.user._id });
+            if (!wallet) {
+                wallet = await Wallet.create({ user: order.user._id });
+            }
+
+            // Add a refund transaction to the wallet
+            wallet.transactions.push({
+                orderId: orderId,
+                type: 'Credit',
+                amount: order.totalAmount
+            });
+
+            // Update the wallet balance
+            wallet.balance += order.totalAmount;
+            await wallet.save();
+
             // Step 3a: Find the product
             const product = await Products.findById(productId);
 
@@ -923,10 +940,9 @@ const cancelOrder = async (req, res) => {
                 await product.save();
             }
         }
-
-        // Step 4: Remove the order
-        await orderModel.findByIdAndDelete(orderId);
-        // res.redirect('/my-orders')
+        // Step 4: Change the order status
+        order.status = 'cancelled';
+        await order.save();
         res.json({ success: true })
 
     } catch (error) {
@@ -1239,6 +1255,20 @@ const generatePDFBuffer = async (orderId, orderedItems, totalPrice, address, use
     return pdfBuffer;
 };
 
+const loadWallet = async (req, res) => {
+    try {
+        const userId = req.session.user_id
+        const userData = await User.findById(req.session.user_id);
+        const cart = await Cart.findOne({ userId }).populate('items.productId');
+        let wallet = await Wallet.findOne({ user: userId });
+        if (!wallet) {
+            wallet = await Wallet.create({ user: userId });
+        }
+        res.render('user/wallet', { user: userData, cart, wallet })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 const loadLogout = async (req, res) => {
@@ -1290,4 +1320,5 @@ module.exports = {
     generateInvoicePDF,
     continuePayment,
     resendOTP,
+    loadWallet,
 }

@@ -102,7 +102,8 @@ userRouter.route('/reset-password')
     .post(userController.resetPassword)
 // Invoice 
 userRouter.get('/generateInvoice/:orderId',auth.isUserLogin, userController.generateInvoicePDF)
-
+// Wallet
+userRouter.get('/wallet', auth.isUserLogin, userController.loadWallet )
 
 userRouter.get('/logout', userController.loadLogout)
 

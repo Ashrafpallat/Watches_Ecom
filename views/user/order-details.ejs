@@ -144,12 +144,12 @@
                   <% if (order.status === 'Payment Pending') { %>
                   <a href="" class="btn btn-sm btn-danger" onclick="continuePayment(event,'<%= order._id %>')">Continue payment</a><br><br>
                   <% } %>
-                  <% if (order.status !== 'Delivered' && order.status !== 'Pending') { %>
+                  <% if (order.status !== 'Delivered' && order.status !== 'Pending' && order.status !== 'cancelled') { %>
                   <a href="" class="btn btn-sm btn-danger" onclick="cancelOrder(event,'<%= order._id %>')">Cancel Order</a><br><br>
                   <% } else if (order.status === 'Pending') { %>
                   <a href="" class="btn btn-sm btn-success" onclick="cancelReturn(event,'<%= order._id %>')">Cancel Return</a><br><br>
-                  <% } else { %>
-                  <a href="" class="btn btn-sm btn-danger" onclick="returnOrder(event,'<%= order._id %>')">Return Order</a><br><br>
+                  <% } else if (order.status !== 'cancelled') { %>
+                    <a href="" class="btn btn-sm btn-danger" onclick="returnOrder(event,'<%= order._id %>')">Return Order</a><br><br>
                   <% } %>
 
                 </div>

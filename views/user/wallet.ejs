@@ -1,0 +1,73 @@
+<%- include('./includes/header.ejs') %>
+
+<div class="men_banner">
+  <%- include('./includes/headerNav.ejs', { cartItemsLength: cart && cart.items ? cart.items.length : 0 }) %>
+  <div class="container">
+    <div class="row gutters">
+      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+        <div class="card h-100">
+          <div class="account-settings">
+            <div class="user-profile">
+              <div class="user-avatar">
+                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">
+              </div>
+              <h5 class="user-name"> <%= user.fname %>
+              </h5>
+              <h6 class="user-email"><%= user.email %></h6>
+            </div>
+
+            <!-- Buttons for Edit Profile, Orders, Manage Address, and Wallet -->
+            <a href="/edit-profile" class="btn btn-light btn-block mb-2">Edit Profile</a>
+            <a href="/my-orders" class="btn btn-light btn-block mb-2">Orders</a>
+            <a href="/manage-address" class="btn btn-light btn-block mb-2">Manage Address</a>
+            <a href="/wallet" class="btn btn-light btn-block mb-2">Wallet</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="row gutters"> -->
+      <div class="col-lg-9 col-xl-9" >
+        <div class="card" style="border-radius: 10px;">
+          <div class="card-header px-4 py-5">
+            <h5 class="text-muted mb-0">Balance :₹<%= wallet.balance %></h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <!-- <p class="lead fw-normal mb-0" style="color: grey;">Receipt</p> -->
+              <!-- <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p> -->
+            </div>
+            <% if (wallet.transactions.length > 0) { %>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Order Id</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% wallet.transactions.forEach(transaction => { %>
+                <tr>
+                  <td><%= transaction.date %></td>
+                  <td>
+                    <% if (transaction.type==='Credit') { %>
+                    <span class="text-success"><%= transaction.type %></span>
+                     <% } else { %>
+                    <span class="text-danger"><%= transaction.type %></span>
+                    <% } %>
+                </td>
+                  <td><%= transaction.amount %></td>
+                  <td><%= transaction.orderId %></td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <% } else { %>
+            <h2>No Transactions</h2>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
