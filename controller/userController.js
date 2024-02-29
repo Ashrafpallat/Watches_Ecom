@@ -667,7 +667,17 @@ const loadCheckout = async (req, res) => {
                     }
                 ]
             });
-            res.render('user/checkout', { user: userData, cart: cart, addresses: userData.addresses, discountAmount })
+
+            let totalAmount = 0;
+            for (const item of cart.items) {
+                // Assuming each product document in the cart has a 'price' field
+                totalAmount += item.productId.price * item.quantity;
+            }
+            let wallet = await Wallet.findOne({ user: userId });
+            if (!wallet) {
+                wallet = await Wallet.create({ user: userId });
+            }
+            res.render('user/checkout', { user: userData, cart: cart, addresses: userData.addresses, discountAmount, totalAmount, wallet })
         }
     } catch (error) {
         console.log(error.message);
@@ -724,7 +734,7 @@ const placeOrder = async (req, res) => {
         const order = await orderModel.create(newOrder);
         const paymentMethod = req.body.paymentMethod;
         req.session.orderId = order._id
-
+        console.log('payment mthd ', paymentMethod);
         if (paymentMethod === 'COD') {
             await orderModel.updateOne({ _id: order._id }, { $set: { status: "order placed" } });
 
@@ -741,7 +751,7 @@ const placeOrder = async (req, res) => {
             console.log('cart items deleted');
             // res.status(201).json(order); // Sending the created order as a response
             res.json({ codSuccess: true })
-        } else {
+        } else if (paymentMethod === 'online') {
             var options = {
                 amount: parseInt(req.body.totalAmount) * 100,  // amount in the smallest currency unit
                 currency: "INR",
@@ -758,6 +768,19 @@ const placeOrder = async (req, res) => {
                 }
 
             });
+        } else if (paymentMethod === 'wallet') {
+            const totalAmount = req.body.totalAmount
+            const wallet = await Wallet.findOne({ user: req.session.user_id });
+            wallet.balance -= totalAmount;
+            wallet.transactions.push({
+                orderId: order._id,
+                type: 'Debit',
+                amount: totalAmount,
+                date: new Date()
+            });
+            await wallet.save();
+            await orderModel.updateOne({ _id: order._id }, { $set: { status: "order placed" } });
+            res.json({ walletSuccess: true });
         }
     } catch (error) {
         console.log(error.message);
