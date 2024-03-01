@@ -21,6 +21,7 @@
         <div class="register-top-grid">
           <h2>PERSONAL INFORMATION</h2>
           <div>
+            <input type="hidden" name="referralCode" value="<%= referralCode %>">
             <span>User Name<label>*</label></span>
             <input type="text" name="fname" pattern="[a-zA-Z0-9]+" title="Username can only contain letters and numbers" required>
           </div>
@@ -37,7 +38,6 @@
             <!-- <input type="number" name="mobile" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number"  required>  -->
             <!-- <label for="phone">Phone:</label> -->
             <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" required>
-
           </div>
           <div class="clearfix"> </div>
           <a class="news-letter" href="#">

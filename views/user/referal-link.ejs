@@ -1,0 +1,45 @@
+<%-include('./includes/header.ejs')  %>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" crossorigin="anonymous">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+
+<!-- Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+
+<div class="men_banner">
+  <%- include('./includes/headerNav.ejs', { cartItemsLength: cart && cart.items ? cart.items.length : 0 }) %>
+  <div class="container">
+    <div class="row gutters">
+      <%- include('./includes/my-profileSidebar.ejs') %>
+      <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <!-- <h6 class="mb-2 text-primary">Personal Details</h6> -->
+              </div>
+            </div>
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="fullName">Share this referal link</label>
+                  <input type="text" disabled class="form-control" id="fullName" value="<%= referralLink %>"><i class="bi bi-clipboard"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<%-include('./includes/footerNav.ejs')  %>
+<%-include('./includes/footer.ejs')  %>

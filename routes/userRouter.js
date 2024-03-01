@@ -104,6 +104,8 @@ userRouter.route('/reset-password')
 userRouter.get('/generateInvoice/:orderId',auth.isUserLogin, userController.generateInvoicePDF)
 // Wallet
 userRouter.get('/wallet', auth.isUserLogin, userController.loadWallet )
+// Referal
+userRouter.get('/referal-link', userController.loadReferralCode)
 
 userRouter.get('/logout', userController.loadLogout)
 

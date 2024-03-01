@@ -12,6 +12,7 @@ const dotenv = require('dotenv');
 require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
 const nodemailer = require('nodemailer');
 const Razorpay = require('razorpay');
@@ -43,14 +44,13 @@ const securePassword = async (password) => {
 }
 
 const loadRegister = async (req, res) => {
-
     try {
         if (req.session.user_id) {
             res.redirect('/home')
         } else {
-            res.render('user/registration', { message: req.flash('error'), user: null, cartItemsLength: null })
+            const referralCode = req.query.ref;
+            res.render('user/registration', { message: req.flash('error'), user: null, cartItemsLength: null, referralCode })
         }
-
     } catch (error) {
         console.log(error.message)
     }
@@ -59,9 +59,10 @@ const loadRegister = async (req, res) => {
 const insertUser = async (req, res) => {
     console.log(process.env.EMAIL_PASSWORD);
     console.log(process.env.EMAIL_USER);
-
     try {
+        const ref = req.query.ref;
         const sPassword = await securePassword(req.body.password);
+        const referralCode = uuidv4();
         const user = User({
             fname: req.body.fname,
             lname: req.body.lname,
@@ -69,9 +70,19 @@ const insertUser = async (req, res) => {
             phone: req.body.phone,
             password: sPassword,
             verified: false,
+            referralCode: referralCode,
+            referredBy: ref || undefined,
         })
-
         const userData = await user.save();
+        if (ref) {
+            const referrer = await User.findOne({ referralCode: ref });
+            if (referrer) {
+                const newUserWallet = new Wallet({ user: userData._id, balance: 500 });
+                await newUserWallet.save();
+            } else {
+                console.log('Referrer not found');
+            }
+        }
         req.session.userRegId = userData._id
         sendOTPVerificationEmail(user, res);
 
@@ -97,6 +108,8 @@ const insertUser = async (req, res) => {
         }
     }
 };
+
+
 //login user methods
 const loadlogin = async (req, res) => {
     try {
@@ -646,6 +659,38 @@ const editAddress = async (req, res) => {
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
+    }
+};
+
+const loadWallet = async (req, res) => {
+    try {
+        const userId = req.session.user_id
+        const userData = await User.findById(req.session.user_id);
+        const cart = await Cart.findOne({ userId }).populate('items.productId');
+        let wallet = await Wallet.findOne({ user: userId });
+        if (!wallet) {
+            wallet = await Wallet.create({ user: userId });
+        }
+        res.render('user/wallet', { user: userData, cart, wallet })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const loadReferralCode = async (req, res) => {
+    try {
+        if (req.session.user_id) {
+            const userId = req.session.user_id;
+            const userData = await User.findById(req.session.user_id);
+            const cart = await Cart.findOne({ userId }).populate('items.productId');
+
+            const referralCode = userData.referralCode;
+            const registrationUrl = 'http://localhost:3000/register';
+            const referralLink = `${registrationUrl}?ref=${referralCode}`;
+            res.render('user/referal-link', { user: userData, cart: cart, referralLink })
+        }
+    } catch (error) {
+        console.log(error.message);
     }
 };
 
@@ -1278,20 +1323,7 @@ const generatePDFBuffer = async (orderId, orderedItems, totalPrice, address, use
     return pdfBuffer;
 };
 
-const loadWallet = async (req, res) => {
-    try {
-        const userId = req.session.user_id
-        const userData = await User.findById(req.session.user_id);
-        const cart = await Cart.findOne({ userId }).populate('items.productId');
-        let wallet = await Wallet.findOne({ user: userId });
-        if (!wallet) {
-            wallet = await Wallet.create({ user: userId });
-        }
-        res.render('user/wallet', { user: userData, cart, wallet })
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+
 
 
 const loadLogout = async (req, res) => {
@@ -1344,4 +1376,6 @@ module.exports = {
     continuePayment,
     resendOTP,
     loadWallet,
+    loadReferralCode,
+
 }
