@@ -106,7 +106,8 @@ userRouter.get('/generateInvoice/:orderId',auth.isUserLogin, userController.gene
 userRouter.get('/wallet', auth.isUserLogin, userController.loadWallet )
 // Referal
 userRouter.get('/referal-link', userController.loadReferralCode)
+// Add review
+userRouter.get('/rate-product', auth.isUserLogin, userController.loadAddReview)
 
 userRouter.get('/logout', userController.loadLogout)
-
 module.exports = userRouter; 

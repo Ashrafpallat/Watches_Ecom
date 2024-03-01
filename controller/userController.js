@@ -1323,7 +1323,16 @@ const generatePDFBuffer = async (orderId, orderedItems, totalPrice, address, use
     return pdfBuffer;
 };
 
-
+const loadAddReview = async (req, res) => {
+    try {
+        const userData = await User.findById({ _id: req.session.user_id });
+        const userId = userData._id;
+        const cart = await Cart.findOne({ userId }).populate('items.productId');
+        res.render('user/add-review', { user: userData, cart: cart });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 const loadLogout = async (req, res) => {
@@ -1377,5 +1386,6 @@ module.exports = {
     resendOTP,
     loadWallet,
     loadReferralCode,
-
+    loadAddReview,
+    
 }

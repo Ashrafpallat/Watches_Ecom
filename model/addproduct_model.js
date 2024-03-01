@@ -23,7 +23,7 @@ const productSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Category',
         required: true,
-      },
+    },
     quantity: {
         type: Number,
         default: 0
@@ -46,6 +46,16 @@ const productSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Offer',
     },
+    ratings: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        value: {
+            type: Number,
+            required: true
+        }
+    }]
 })
 
 module.exports = mongoose.model('Products', productSchema)

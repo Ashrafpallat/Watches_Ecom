@@ -1,0 +1,139 @@
+<%-include('./includes/header.ejs')  %>
+
+<script type="application/x-javascript">
+  addEventListener("load", function() {
+    setTimeout(hideURLbar, 0);
+  }, false);
+
+  function hideURLbar() {
+    window.scrollTo(0, 1);
+  }
+</script>
+<link href="/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Custom Theme files -->
+<link href="/css/style.css" rel='stylesheet' type='text/css' />
+<!-- Custom Theme files -->
+<!--webfont-->
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Dorsa' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+<!-- start menu -->
+<link href="/css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="/js/megamenu.js"></script>
+<script>
+  $(document).ready(function() {
+    $(".megamenu").megamenu();
+  });
+</script>
+<script src="/js/jquery.easydropdown.js"></script>
+<script src="/js/easyResponsiveTabs.js" type="text/javascript"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#horizontalTab').easyResponsiveTabs({
+      type: 'default', //Types: default, vertical, accordion           
+      width: 'auto', //auto or any width like 600px
+      fit: true // 100% fit in a container
+    });
+  });
+</script>
+<script src="/js/simpleCart.min.js"> </script>
+
+</head>
+
+<body>
+  <div class="men_banner">
+    <%- include('./includes/headerNav.ejs', { cartItemsLength: cart && cart.items ? cart.items.length : 0 }) %>
+
+
+    <!----search-scripts---->
+    <script src="/js/classie1.js"></script>
+    <script src="/js/uisearch.js"></script>
+    <script>
+      new UISearch(document.getElementById('sb-search'));
+    </script>
+    <div class="container">
+      <h2 style="padding-top: 50px;">Reviews and Ratings</h2>
+      
+<div class="star-rating">
+  <input type="radio" id="5-stars" name="rating" value="5" />
+  <label for="5-stars" class="star">&#9733;</label>
+  <input type="radio" id="4-stars" name="rating" value="4" />
+  <label for="4-stars" class="star">&#9733;</label>
+  <input type="radio" id="3-stars" name="rating" value="3" />
+  <label for="3-stars" class="star">&#9733;</label>
+  <input type="radio" id="2-stars" name="rating" value="2" />
+  <label for="2-stars" class="star">&#9733;</label>
+  <input type="radio" id="1-star" name="rating" value="1" />
+  <label for="1-star" class="star">&#9733;</label>
+</div>
+
+<article>
+  <h4>How it works</h4>
+  <p>The stars are labels which each reference a radio button. They are written in the code in reverse order, 5-1.</p>
+  <p>By using display:flex and flex-direction:row-reverse on their container they appear in the browser the opposite way around, 1-5.</p>
+  <p>We can now use the general sibling selector ~ to style any subsequent elements - the ones that appear before on screen.</p>
+  <p><a href="https://codepen.io/chris22smith/pen/pRQGBv">Alternate version with floats for legacy browsers</a></p>
+</article>
+    </div>
+
+    <style>
+      /* component */
+
+.star-rating {
+  border:solid 1px #ccc;
+  display:flex;
+  flex-direction: row-reverse;
+  font-size:1.5em;
+  justify-content:space-around;
+  padding:0 .2em;
+  text-align:center;
+  width:5em;
+}
+
+.star-rating input {
+  display:none;
+}
+
+.star-rating label {
+  color:#ccc;
+  cursor:pointer;
+}
+
+.star-rating :checked ~ label {
+  color:#f90;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color:#fc0;
+}
+
+/* explanation */
+
+article {
+  background-color:#ffe;
+  box-shadow:0 0 1em 1px rgba(0,0,0,.25);
+  color:#006;
+  font-family:cursive;
+  font-style:italic;
+  margin:4em;
+  max-width:30em;
+  padding:2em;
+}
+    </style>
+
+    <!-- Your product details content goes here -->
+    <%-include('./includes/footerNav.ejs')  %>
+    <script defer src="/js/jquery.flexslider.js"></script>
+    <link rel="stylesheet" href="/css/flexslider.css" type="text/css" media="screen" />
+    <script>
+      // Can also be used with $(document).ready()
+      $(window).load(function() {
+        $('.flexslider').flexslider({
+          animation: "slide",
+          controlNav: "thumbnails"
+        });
+      });
+    </script>
+    <%-include('./includes/footer.ejs')  %>
