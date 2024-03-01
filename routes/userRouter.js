@@ -83,7 +83,7 @@ userRouter.route('/checkout')
     .get(auth.isUserLogin, userController.loadCheckout)
     .post(userController.addAddressFromCheckout)
 userRouter.post('/place-order', userController.placeOrder)
-userRouter.post('/verifyPayment',userController.verifyPayment)
+userRouter.post('/verifyPayment', userController.verifyPayment)
 userRouter.get('/order-placed', auth.isUserLogin, userController.loadOrderPlaced)
 userRouter.get('/my-orders', auth.isUserLogin, userController.loadMyorders)
 userRouter.get('/order-details/:id', auth.isUserLogin, userController.loadOrderDetails)
@@ -91,7 +91,7 @@ userRouter.post('/cancel-order', userController.cancelOrder)
 userRouter.post('/return-order', userController.sendReturnRequest)
 userRouter.post('/cancel-return', userController.cancelReturnRequest)
 // Continue payment
-userRouter.post('/continue-payment',userController.continuePayment)
+userRouter.post('/continue-payment', userController.continuePayment)
 // Forgot password
 userRouter.post('/forgot-password', userController.sendOTP)
 userRouter.route('/verifyOTP2')
@@ -101,13 +101,15 @@ userRouter.route('/reset-password')
     .get(userController.loadResetPassword)
     .post(userController.resetPassword)
 // Invoice 
-userRouter.get('/generateInvoice/:orderId',auth.isUserLogin, userController.generateInvoicePDF)
+userRouter.get('/generateInvoice/:orderId', auth.isUserLogin, userController.generateInvoicePDF)
 // Wallet
-userRouter.get('/wallet', auth.isUserLogin, userController.loadWallet )
+userRouter.get('/wallet', auth.isUserLogin, userController.loadWallet)
 // Referal
 userRouter.get('/referal-link', userController.loadReferralCode)
 // Add review
-userRouter.get('/rate-product', auth.isUserLogin, userController.loadAddReview)
+userRouter.route('/rate-product/:productId')
+    .get(auth.isUserLogin, userController.loadAddReview)
+    .post(userController.addReview)
 
 userRouter.get('/logout', userController.loadLogout)
 module.exports = userRouter; 

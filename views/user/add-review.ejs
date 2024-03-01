@@ -1,4 +1,4 @@
-<%-include('./includes/header.ejs')  %>
+<%- include('./includes/header.ejs')  %>
 
 <script type="application/x-javascript">
   addEventListener("load", function() {
@@ -53,87 +53,94 @@
       new UISearch(document.getElementById('sb-search'));
     </script>
     <div class="container">
-      <h2 style="padding-top: 50px;">Reviews and Ratings</h2>
-      
-<div class="star-rating">
-  <input type="radio" id="5-stars" name="rating" value="5" />
-  <label for="5-stars" class="star">&#9733;</label>
-  <input type="radio" id="4-stars" name="rating" value="4" />
-  <label for="4-stars" class="star">&#9733;</label>
-  <input type="radio" id="3-stars" name="rating" value="3" />
-  <label for="3-stars" class="star">&#9733;</label>
-  <input type="radio" id="2-stars" name="rating" value="2" />
-  <label for="2-stars" class="star">&#9733;</label>
-  <input type="radio" id="1-star" name="rating" value="1" />
-  <label for="1-star" class="star">&#9733;</label>
-</div>
+      <h1 style="padding-top: 50px;">Reviews and Ratings</h1>
 
-<article>
-  <h4>How it works</h4>
-  <p>The stars are labels which each reference a radio button. They are written in the code in reverse order, 5-1.</p>
-  <p>By using display:flex and flex-direction:row-reverse on their container they appear in the browser the opposite way around, 1-5.</p>
-  <p>We can now use the general sibling selector ~ to style any subsequent elements - the ones that appear before on screen.</p>
-  <p><a href="https://codepen.io/chris22smith/pen/pRQGBv">Alternate version with floats for legacy browsers</a></p>
-</article>
+      <!-- Input box for typing review -->
+      <form action="/rate-product/:<%= productId %>" method="POST">
+        <input type="hidden" value="<%= productId %>" name="productId">
+        <!-- Rating stars -->
+        <div class="star-rating">
+          <input type="radio" id="5-stars" name="rating" value="5" />
+          <label for="5-stars" class="star">&#9733;</label>
+          <input type="radio" id="4-stars" name="rating" value="4" />
+          <label for="4-stars" class="star">&#9733;</label>
+          <input type="radio" id="3-stars" name="rating" value="3" />
+          <label for="3-stars" class="star">&#9733;</label>
+          <input type="radio" id="2-stars" name="rating" value="2" />
+          <label for="2-stars" class="star">&#9733;</label>
+          <input type="radio" id="1-star" name="rating" value="1" />
+          <label for="1-star" class="star">&#9733;</label>
+        </div>
+        <div class="form-group">
+        </div>
+        <div class="form-group">
+          <label for="review">Type Your Review:</label>
+          <textarea class="form-control" id="review" name="review" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+      </form>
     </div>
+  </div>
 
-    <style>
-      /* component */
+  <style>
+    /* component */
 
-.star-rating {
-  border:solid 1px #ccc;
-  display:flex;
-  flex-direction: row-reverse;
-  font-size:1.5em;
-  justify-content:space-around;
-  padding:0 .2em;
-  text-align:center;
-  width:5em;
-}
+    .star-rating {
+      border: solid 1px #ccc;
+      display: flex;
+      flex-direction: row-reverse;
+      font-size: 1.5em;
+      justify-content: space-around;
+      padding: 0 .2em;
+      text-align: center;
+      width: 15em;
+    }
 
-.star-rating input {
-  display:none;
-}
+    .star-rating input {
+      display: none;
+    }
 
-.star-rating label {
-  color:#ccc;
-  cursor:pointer;
-}
+    .star-rating label {
+      color: #ccc;
+      cursor: pointer;
+    }
 
-.star-rating :checked ~ label {
-  color:#f90;
-}
+    .star-rating :checked~label {
+      color: #f90;
+    }
 
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-  color:#fc0;
-}
+    .star-rating label:hover,
+    .star-rating label:hover~label {
+      color: #fc0;
+    }
 
-/* explanation */
+    /* explanation */
 
-article {
-  background-color:#ffe;
-  box-shadow:0 0 1em 1px rgba(0,0,0,.25);
-  color:#006;
-  font-family:cursive;
-  font-style:italic;
-  margin:4em;
-  max-width:30em;
-  padding:2em;
-}
-    </style>
+    article {
+      background-color: #ffe;
+      box-shadow: 0 0 1em 1px rgba(0, 0, 0, .25);
+      color: #006;
+      font-family: cursive;
+      font-style: italic;
+      margin: 4em;
+      max-width: 30em;
+      padding: 2em;
+    }
+  </style>
 
-    <!-- Your product details content goes here -->
-    <%-include('./includes/footerNav.ejs')  %>
-    <script defer src="/js/jquery.flexslider.js"></script>
-    <link rel="stylesheet" href="/css/flexslider.css" type="text/css" media="screen" />
-    <script>
-      // Can also be used with $(document).ready()
-      $(window).load(function() {
-        $('.flexslider').flexslider({
-          animation: "slide",
-          controlNav: "thumbnails"
-        });
+  <!-- Your product details content goes here -->
+  <%-include('./includes/footerNav.ejs')  %>
+  <script defer src="/js/jquery.flexslider.js"></script>
+  <link rel="stylesheet" href="/css/flexslider.css" type="text/css" media="screen" />
+  <script>
+    // Can also be used with $(document).ready()
+    $(window).load(function() {
+      $('.flexslider').flexslider({
+        animation: "slide",
+        controlNav: "thumbnails"
       });
-    </script>
-    <%-include('./includes/footer.ejs')  %>
+    });
+  </script>
+  <%-include('./includes/footer.ejs')  %>

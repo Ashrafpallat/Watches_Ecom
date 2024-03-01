@@ -17,6 +17,7 @@ const { v4: uuidv4 } = require('uuid');
 const nodemailer = require('nodemailer');
 const Razorpay = require('razorpay');
 const Wallet = require('../model/wallet-model');
+const { log } = require('console');
 var instance = new Razorpay({
     key_id: 'rzp_test_WMFGNMq1lP6s4b',
     key_secret: 'f8OZaeUgk7Yo8Ufa8qK5L1qF',
@@ -257,7 +258,9 @@ const loadProducts = async (req, res) => {
 
 const loadProductDetails = async (req, res) => {
     const productId = req.params.productId;
-    const product = await Products.findById(productId); // Fetch the details of the specific product
+    const product = await Products.findById(productId)
+        .populate('ratings.user')
+        .populate('reviews.user');
 
     if (req.session.user_id) {
         const userData = await User.findById({ _id: req.session.user_id });
@@ -287,6 +290,37 @@ const loadProductDetails = async (req, res) => {
     }
 
 };
+
+const loadAddReview = async (req, res) => {
+    try {
+        const productId = req.params.productId
+        const userData = await User.findById({ _id: req.session.user_id });
+        const userId = userData._id;
+        const cart = await Cart.findOne({ userId }).populate('items.productId');
+        res.render('user/add-review', { user: userData, cart: cart, productId });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const addReview = async (req, res) => {
+    try {
+        const { productId, rating, review } = req.body;
+        const userData = await User.findById({ _id: req.session.user_id });
+        // Find the product by ID
+        const product = await Products.findById(productId);
+        product.ratings.push({ user: userData._id, value: rating });
+        product.reviews.push({ user: userData._id, review });
+
+        // Save the updated product document
+        await product.save();
+        console.log('reviewd');
+        res.redirect(`/productsDetails/${productId}`);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 // send otp verification mail
 const sendOTPVerificationEmail = async ({ _id, email }, res) => {
     try {
@@ -1323,16 +1357,7 @@ const generatePDFBuffer = async (orderId, orderedItems, totalPrice, address, use
     return pdfBuffer;
 };
 
-const loadAddReview = async (req, res) => {
-    try {
-        const userData = await User.findById({ _id: req.session.user_id });
-        const userId = userData._id;
-        const cart = await Cart.findOne({ userId }).populate('items.productId');
-        res.render('user/add-review', { user: userData, cart: cart });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+
 
 
 const loadLogout = async (req, res) => {
@@ -1387,5 +1412,5 @@ module.exports = {
     loadWallet,
     loadReferralCode,
     loadAddReview,
-    
+    addReview,
 }
