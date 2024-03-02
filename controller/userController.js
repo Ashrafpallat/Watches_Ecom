@@ -268,27 +268,36 @@ const loadProductDetails = async (req, res) => {
             try {
                 const userId = userData._id;
                 const cart = await Cart.findOne({ userId }).populate('items.productId');
-                // const userData = await User.findById({ _id: req.session.user_id });
-                res.render('user/productsDetails', { product: product, user: userData, cart: cart });
+                let order = await orderModel.findOne({
+                    user: userId,
+                    'items.product': productId,
+                    status: 'Delivered' // Assuming the order status indicates delivery completion
+                });
+
+                if (order.length<1) {
+                    console.log('User has not purchased the product.');
+                    order = null;
+                }
+                console.log('order ', order);
+                res.render('user/productsDetails', { product: product, user: userData, cart: cart, order });
             } catch (error) {
                 console.log(error.message);
             }
         } else {
             try {
-                const products = await Products.find(); // Fetch products from MongoDB
-                res.render('user/productsDetails', { products, user: null, cart: null });
+                const products = await Products.find();
+                res.render('user/productsDetails', { products, user: null, cart: null, order: null });
             } catch (error) {
                 console.log(error.message);
             }
         }
     } else {
         try {
-            res.render('user/productsDetails', { product: product, user: null, cart: null });
+            res.render('user/productsDetails', { product: product, user: null, cart: null, order: null });
         } catch (error) {
             console.log(error.message);
         }
     }
-
 };
 
 const loadAddReview = async (req, res) => {
@@ -297,7 +306,9 @@ const loadAddReview = async (req, res) => {
         const userData = await User.findById({ _id: req.session.user_id });
         const userId = userData._id;
         const cart = await Cart.findOne({ userId }).populate('items.productId');
-        res.render('user/add-review', { user: userData, cart: cart, productId });
+
+
+        res.render('user/add-review', { user: userData, cart: cart, productId, });
     } catch (error) {
         console.log(error.message);
     }
@@ -307,12 +318,9 @@ const addReview = async (req, res) => {
     try {
         const { productId, rating, review } = req.body;
         const userData = await User.findById({ _id: req.session.user_id });
-        // Find the product by ID
         const product = await Products.findById(productId);
         product.ratings.push({ user: userData._id, value: rating });
         product.reviews.push({ user: userData._id, review });
-
-        // Save the updated product document
         await product.save();
         console.log('reviewd');
         res.redirect(`/productsDetails/${productId}`);

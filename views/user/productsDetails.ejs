@@ -363,10 +363,14 @@
           <div class="sap_tabs">
             <div id="horizontalTab" style="display: block; width: 100%; margin: 0px;">
               <ul class="resp-tabs-list">
-                <li class="resp-tab-item" aria-controls="tab_item-0" role="tab"><span>Reviews and Ratings</span></li>
+                <li class="resp-tab-item" aria-controls="tab_item-0" role="tab"><span>Reviews and Ratings (<%= product.ratings.length %>)</span></li>
                 <!-- <li class="resp-tab-item" aria-controls="tab_item-1" role="tab"><span>Additional Information</span></li>
                 <li class="resp-tab-item" aria-controls="tab_item-2" role="tab"><span>Reviews and Ratings</span></li> -->
+                <% if (order!=null) { %>
                 <li style="float: right;"><a href="/rate-product/<%= product._id %>"><button class="btn btn-sm" style="background-color: #F9D9BE; ">Rate Product</button></a></li>
+                <% } else { %>
+                <l style="float: right;"><a href="/productsDetails/<%= product._id %>"><button class="btn btn-sm" onclick="cantReview()" style="background-color: #F9D9BE; ">Rate Product</button></a></li>
+                <% } %>
               </ul>
               <div class="resp-tabs-container">
                 <div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
@@ -386,7 +390,9 @@
                         <h4>Reviews and Ratings</h4>
                         <% product.ratings.forEach(rating => { %>
                         <strong><%= rating.user.fname %></strong>
-
+                        <i class="fa-solid fa-circle-check" style="padding-left: 3px; padding-right: 3px;"></i>
+                        <span style="color: green;">Certified Buyer</span>
+                        <i class="bi bi-check-circle-fill  me-2"></i>
                         <div>
                           <p style="float: left; padding-right: 15px;"> <span class="star"> <%= '★'.repeat(rating.value) + '☆'.repeat(5 - rating.value) %></span></p>
                           <% if (product.reviews.length > 0) { %>
@@ -481,6 +487,19 @@
       </div>
     </div>
     <%-include('./includes/footerNav.ejs')  %>
+    <script>
+      function cantReview() {
+		event.preventDefault()
+        Swal.fire({
+          icon: "warning",
+          title: "You can't review this product unitl you have delivered the order",
+          text: "",
+          showConfirmButton: true, // This will hide the "OK" button
+          footer: '',
+        });
+      }
+    </script>
+    <script src="https://kit.fontawesome.com/e82fe5297f.js" crossorigin="anonymous"></script>
     <script defer src="/js/jquery.flexslider.js"></script>
     <link rel="stylesheet" href="/css/flexslider.css" type="text/css" media="screen" />
     <script>
