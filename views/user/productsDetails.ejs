@@ -370,7 +370,7 @@
                 <li style="float: right;"><a href="/rate-product/<%= product._id %>"><button class="btn btn-sm" style="background-color: #F9D9BE; ">Rate Product</button></a></li>
                 <% } else { %>
                 <l style="float: right;"><a href="/productsDetails/<%= product._id %>"><button class="btn btn-sm" onclick="cantReview()" style="background-color: #F9D9BE; ">Rate Product</button></a></li>
-                <% } %>
+                  <% } %>
               </ul>
               <div class="resp-tabs-container">
                 <div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
@@ -388,25 +388,28 @@
 
                         <% if (product.ratings.length > 0) { %>
                         <h4>Reviews and Ratings</h4>
-                        <% product.ratings.forEach(rating => { %>
-                        <strong><%= rating.user.fname %></strong>
+                        <% for (let i = 0; i < product.ratings.length; i++) { %>
+                        <% const rating = product.ratings[i]; %>
+                        <strong style="float: left;"><%= rating.user.fname %></strong>
                         <i class="fa-solid fa-circle-check" style="padding-left: 3px; padding-right: 3px;"></i>
                         <span style="color: green;">Certified Buyer</span>
                         <i class="bi bi-check-circle-fill  me-2"></i>
                         <div>
                           <p style="float: left; padding-right: 15px;"> <span class="star"> <%= '★'.repeat(rating.value) + '☆'.repeat(5 - rating.value) %></span></p>
                           <% if (product.reviews.length > 0) { %>
-                          <% product.reviews.forEach(review => { %>
-                          <p style="padding-top: 4px;"> <%= review.review %></p>
-                          <% }); %>
+                          <% for (let j = i; j <= i; j++) { %>
+                          <% const review = product.reviews[j]; %>
+                          <p style="padding-top: 4px; padding-bottom: 20px;"> <%= review.review %></p>
+                          <% } %>
                           <% } else { %>
                           <p>No reviews available.</p>
                           <% } %>
                         </div>
-                        <% }); %>
+                        <% } %>
                         <% } else { %>
                         <p>No ratings available.</p>
                         <% } %>
+
 
 
                       </li>
@@ -489,7 +492,7 @@
     <%-include('./includes/footerNav.ejs')  %>
     <script>
       function cantReview() {
-		event.preventDefault()
+        event.preventDefault()
         Swal.fire({
           icon: "warning",
           title: "You can't review this product unitl you have delivered the order",

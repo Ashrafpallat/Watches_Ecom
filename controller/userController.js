@@ -271,14 +271,13 @@ const loadProductDetails = async (req, res) => {
                 let order = await orderModel.findOne({
                     user: userId,
                     'items.product': productId,
-                    status: 'Delivered' // Assuming the order status indicates delivery completion
+                    status: 'Delivered' 
                 });
 
-                if (order.length<1) {
+                if (order && order.length>0) {
                     console.log('User has not purchased the product.');
                     order = null;
                 }
-                console.log('order ', order);
                 res.render('user/productsDetails', { product: product, user: userData, cart: cart, order });
             } catch (error) {
                 console.log(error.message);
