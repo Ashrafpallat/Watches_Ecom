@@ -3,7 +3,6 @@ const Products = require('../model/addproduct_model')
 const Category = require('../model/category_model');
 const Cart = require('../model/cart-model');
 const path = require('path');
-const sharp = require('sharp');
 const { log } = require('console');
 const Wishlist = require('../model/wishlist-model');
 const orderModel = require('../model/order-model');
