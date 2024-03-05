@@ -5,7 +5,8 @@ const mongoose= require('mongoose');
 
 function connectDB(){
 const { v4: uuidv4 } = require('uuid');
-    mongoose.connect    ('mongodb://127.0.0.1:27017/watches')
+    // mongoose.connect    ('mongodb://127.0.0.1:27017/watches')
+    mongoose.connect    ('mongodb+srv://ashraf:ashraf@watches.fd0lpsk.mongodb.net/?retryWrites=true&w=majority')
         .then(()=>{
             console.log('Connected to MongoDB');
         })
