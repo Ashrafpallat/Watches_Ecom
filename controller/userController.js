@@ -726,7 +726,8 @@ const loadReferralCode = async (req, res) => {
             const cart = await Cart.findOne({ userId }).populate('items.productId');
 
             const referralCode = userData.referralCode;
-            const registrationUrl = 'http://localhost:3000/register';
+            // const registrationUrl = 'http://localhost:3000/register';
+            const registrationUrl = 'http://mywatches.site/register';
             const referralLink = `${registrationUrl}?ref=${referralCode}`;
             res.render('user/referal-link', { user: userData, cart: cart, referralLink })
         }

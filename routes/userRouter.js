@@ -58,8 +58,8 @@ userRouter.post('/add-to-cart/:productId', addtoCart)
 userRouter.post("/change-product-quantity", changeProductQuantity)
 userRouter.get('/delete-from-cart/:productId', deleteFromCart)
 //  wishlist
-userRouter.get('/wishlist', userController.loadWishlist)
-userRouter.post('/wishlist/add/:productId', addToWishlist);
+userRouter.get('/wishlist',auth.isUserLogin, userController.loadWishlist)
+userRouter.post('/wishlist/add/:productId',auth.isUserLogin, addToWishlist);
 userRouter.get('/delete-from-wishlist/:wishlistItemId', deleteFromWishlist)
 // Coupon management
 userRouter.post('/apply-coupon', applyCoupon)
