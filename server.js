@@ -48,12 +48,6 @@ const adminRouter= require('./routes/adminRouter');
 app.use('/', userRouter);
 app.use('/admin/', adminRouter);
 
-
-// app.use((req, res, next) => {
-//     res.set('Cache-control', 'no-store,no-cache', 'must - revalidate', 'private ')
-//     next()
-// })
-
 app.listen(PORT, ()=>{
     console.log(`Server is running at PORT http://localhost:${PORT}`);
 });
